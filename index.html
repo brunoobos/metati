@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meta TI</title>
+    <title>Meta TI - Sistema de Estudos</title>
     <style>
         * {
             box-sizing: border-box;
@@ -103,100 +103,29 @@
             font-size: 2em;
         }
         
-        /* Carrossel */
-        .carousel-container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px auto;
-            position: relative;
-            overflow: hidden;
+        .progress-summary {
+            background-color: white;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .carousel {
-            display: flex;
-            transition: transform 0.5s ease;
-        }
-        
-        .carousel-slide {
-            min-width: 100%;
-            position: relative;
-        }
-        
-        .carousel-slide img {
-            width: 100%;
-            display: block;
-            height: 400px;
-            object-fit: cover;
-        }
-        
-        .carousel-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .carousel-caption h2 {
-            margin: 0;
-            font-size: 2em;
-            color: #fff;
-        }
-        
-        .carousel-caption p {
-            margin: 10px 0 0;
-            font-size: 1.2em;
-        }
-        
-        .carousel-nav {
-            text-align: center;
-            margin-top: 10px;
-        }
-        
-        .carousel-dot {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            background-color: #bbb;
-            border-radius: 50%;
-            margin: 0 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .carousel-dot.active {
-            background-color: #e74c3c;
-        }
-        
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background-color: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 15px;
-            cursor: pointer;
-            font-size: 1.5em;
-            z-index: 10;
-            transition: background-color 0.3s;
+            margin: 20px auto;
+            max-width: 1200px;
+            text-align: center;
         }
         
-        .carousel-btn:hover {
-            background-color: rgba(0,0,0,0.8);
+        .progress-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
         }
         
-        .carousel-btn.prev {
-            left: 10px;
-        }
-        
-        .carousel-btn.next {
-            right: 10px;
+        .progress-fill {
+            height: 100%;
+            background-color: #2ecc71;
+            border-radius: 10px;
+            transition: width 0.5s ease;
         }
         
         .container {
@@ -253,37 +182,131 @@
         
         .category {
             margin-bottom: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: #f9f9f9;
         }
         
         .category h3 {
             color: #3498db;
             margin-bottom: 10px;
             font-size: 1.2em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .federal-categories .category h3 {
-            color: #2ecc71;
+        .category-progress {
+            font-size: 0.8em;
+            color: #7f8c8d;
         }
         
-        .links a {
-            display: block;
+        .content-item {
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
-            color: #2c3e50;
-            text-decoration: none;
             padding: 10px;
             border-radius: 4px;
-            background-color: #f0f0f0;
+            background-color: white;
             transition: all 0.3s;
         }
         
-        .links a:hover {
-            background-color: #e0e0e0;
-            transform: translateX(5px);
+        .content-item:hover {
+            background-color: #f0f0f0;
         }
         
-        .state-categories, .federal-categories {
+        .content-item.completed {
+            background-color: #e8f6ef;
+            border-left: 4px solid #2ecc71;
+        }
+        
+        .content-checkbox {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .content-text {
+            flex: 1;
+        }
+        
+        .content-link {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.8em;
+            transition: background-color 0.3s;
+        }
+        
+        .content-link:hover {
+            background-color: #2980b9;
+        }
+        
+        .add-link-btn {
+            margin-left: 10px;
+            padding: 5px 10px;
+            background-color: #95a5a6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .add-link-btn:hover {
+            background-color: #7f8c8d;
+        }
+        
+        .link-input-container {
+            display: none;
+            margin-top: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .link-input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        
+        .link-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .link-save, .link-cancel {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+        
+        .link-save {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .link-cancel {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .state-categories {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
         
@@ -307,6 +330,30 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 1em;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .filter-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .filter-btn.active {
+            background-color: #2c3e50;
         }
         
         @media (max-width: 768px) {
@@ -341,20 +388,23 @@
                 grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             }
             
-            .carousel-slide img {
-                height: 300px;
-            }
-            
-            .carousel-caption h2 {
-                font-size: 1.5em;
-            }
-            
-            .carousel-caption p {
-                font-size: 1em;
-            }
-            
-            .state-categories, .federal-categories {
+            .state-categories {
                 grid-template-columns: 1fr;
+            }
+            
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .content-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .content-link, .add-link-btn {
+                margin-left: 0;
+                margin-top: 5px;
             }
         }
     </style>
@@ -366,11 +416,8 @@
         <div class="menu-toggle">☰</div>
         <ul class="nav-links">
             <li><a href="#">Início</a></li>
-            <li class="dropdown">
-               
-                </div>
-            </li>
-            
+            <li><a href="#progresso">Meu Progresso</a></li>
+            <li><a href="#disciplinas">Disciplinas</a></li>
         </ul>
     </div>
     
@@ -379,41 +426,13 @@
         <p>Preparação para concursos públicos na área de Tecnologia da Informação</p>
     </header>
 
-    <!-- Carrossel 
-    <div class="carousel-container">
-        <div class="carousel" id="carousel">
-            <div class="carousel-slide">
-                <img src="https://via.placeholder.com/1200x400/3498db/ffffff?text=Gestão+de+TI+e+Governança" alt="Gestão de TI">
-                <div class="carousel-caption">
-                    <h2>Gestão de TI</h2>
-                    <p>ITIL, COBIT e Metodologias Ágeis para concursos</p>
-                </div>
-            </div>
-            <div class="carousel-slide">
-                <img src="https://via.placeholder.com/1200x400/2ecc71/ffffff?text=Contratações+de+TI" alt="Contratações de TI">
-                <div class="carousel-caption">
-                    <h2>Contratações de TI</h2>
-                    <p>Licitações, contratos e gestão de fornecedores</p>
-                </div>
-            </div>
-            <div class="carousel-slide">
-                <img src="https://via.placeholder.com/1200x400/e74c3c/ffffff?text=Inteligência+Artificial" alt="Inteligência Artificial">
-                <div class="carousel-caption">
-                    <h2>Inteligência Artificial</h2>
-                    <p>Machine Learning, Deep Learning e IA aplicada</p>
-                </div>
-            </div>
+    <div class="progress-summary">
+        <h3>Meu Progresso Geral</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
         </div>
-        
-        <button class="carousel-btn prev" id="prevBtn">❮</button>
-        <button class="carousel-btn next" id="nextBtn">❯</button>
-        
-        <div class="carousel-nav">
-            <span class="carousel-dot active" data-slide="0"></span>
-            <span class="carousel-dot" data-slide="1"></span>
-            <span class="carousel-dot" data-slide="2"></span>
-        </div>
-    </div>-->
+        <p id="progressText">0% concluído</p>
+    </div>
 
     <div class="container">
         <div class="search-container">
@@ -423,69 +442,73 @@
         <div class="states-container">
             <!-- Botões para órgãos públicos -->
             <button class="state-btn" data-state="TCU">TCU</button>
-            <button class="state-btn" data-state="CGU">TCE RJ</button>
-            <button class="state-btn" data-state="STJ">TCE SC</button>
-           
+            <button class="state-btn" data-state="TCE_RJ">TCE RJ</button>
+            <button class="state-btn" data-state="TCE_SC">TCE SC</button>
         </div>
         
         <div id="stateInfo" class="state-info">
             <h2 id="stateName">Órgão</h2>
+            <div class="controls">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="pending">Pendentes</button>
+                <button class="filter-btn" data-filter="completed">Concluídos</button>
+            </div>
             
             <!-- Categorias para disciplinas de TI -->
             <div class="state-categories">
                 <div class="category">
-                    <h3>GESTÃO DE TI</h3>
+                    <h3>GESTÃO DE TI <span class="category-progress" id="gestaoTIProgress">0/0</span></h3>
                     <div class="links" id="gestaoTILinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>CONTRATAÇÕES DE TI</h3>
+                    <h3>CONTRATAÇÕES DE TI <span class="category-progress" id="contratacaoTIProgress">0/0</span></h3>
                     <div class="links" id="contratacaoTILinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>INTELIGÊNCIA ARTIFICIAL</h3>
+                    <h3>INTELIGÊNCIA ARTIFICIAL <span class="category-progress" id="inteligenciaArtificialProgress">0/0</span></h3>
                     <div class="links" id="inteligenciaArtificialLinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>COMPUTAÇÃO EM NUVEM</h3>
+                    <h3>COMPUTAÇÃO EM NUVEM <span class="category-progress" id="computacaoNuvemProgress">0/0</span></h3>
                     <div class="links" id="computacaoNuvemLinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
 
                 <div class="category">
-                    <h3>SEGURANÇA DA INFORMAÇÃO</h3>
+                    <h3>SEGURANÇA DA INFORMAÇÃO <span class="category-progress" id="segurancaInformacaoProgress">0/0</span></h3>
                     <div class="links" id="segurancaInformacaoLinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>ENGENHARIA DE SOFTWARE</h3>
+                    <h3>ENGENHARIA DE SOFTWARE <span class="category-progress" id="engenhariaSoftwareProgress">0/0</span></h3>
                     <div class="links" id="engenhariaSoftwareLinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>ENGENHARIA DE DADOS</h3>
+                    <h3>ENGENHARIA DE DADOS <span class="category-progress" id="engenhariaDadosProgress">0/0</span></h3>
                     <div class="links" id="engenhariaDadosLinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
                 
                 <div class="category">
-                    <h3>INFRAESTRUTURA DE TI</h3>
+                    <h3>INFRAESTRUTURA DE TI <span class="category-progress" id="infraestruturaTIProgress">0/0</span></h3>
                     <div class="links" id="infraestruturaTILinks">
-                        <!-- Links serão adicionados dinamicamente -->
+                        <!-- Conteúdo será adicionado dinamicamente -->
                     </div>
                 </div>
             </div>
@@ -506,66 +529,311 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
         
-        // Dados atualizados com disciplinas de TI
+        // Dados atualizados com disciplinas de TI (sem links)
         const stateLinks = {
             'TCU': {
                 gestaoTI: [
-                    { text: '1 Gerenciamento de serviços (ITIL v4): conceitos básicos, estrutura e objetivos', url: 'https://docs.google.com/document/d/1lWTJfjeaYk6L4l2KRKvH0yG1qAYwEKF49aLoyURfXmI/edit?usp=sharing' },
-                    { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos', url: 'https://docs.google.com/document/d/1lWTJfjeaYk6L4l2KRKvH0yG1qAYwEKF49aLoyURfXmI/edit?usp=sharing' },
-                    { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD', url: 'https://docs.google.com/document/d/1lWTJfjeaYk6L4l2KRKvH0yG1qAYwEKF49aLoyURfXmI/edit?usp=sharing' }
+                    { text: '1 Gerenciamento de serviços (ITIL v4): conceitos básicos, estrutura e objetivos' },
+                    { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos' },
+                    { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD' }
                 ],
                 contratacaoTI: [
-                    { text: '1 Etapas da Contratação de Soluções de TI. Estudo técnico preliminar (ETP). Termo de Referência (TR) e Projeto Básico', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Tipos de Soluções e Modelos de Serviço. Contratação de software sob demanda, licenciamento, SaaS, IaaS, PaaS. Fábrica de software e sustentação de sistemas. Serviços de infraestrutura em nuvem e data center. Serviços gerenciados de TI e outsourcing', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '3 Governança, Fiscalização e Gestão de Contratos. Papéis e responsabilidades: gestor, fiscal técnico, fiscal administrativo. Indicadores de nível de serviço (SLAs) e penalidades. Gestão de mudanças contratuais e reequilíbrio econômico-financeiro.', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '4 Riscos e Controles em Contratações. Identificação, análise e resposta a riscos em contratos de TI. Controles internos aplicáveis às contratações públicas. Auditoria e responsabilização (jurídica e administrativa)', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '5 Aspectos Técnicos e Estratégicos. Integração com o PDTIC e alinhamento com a estratégia institucional. Mapeamento e definição de requisitos técnicos e não funcionais. Sustentabilidade, acessibilidade e segurança da informação nos contratos', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '6 Legislação e Normativos Aplicáveis. Lei nº 14.133/2021, Decreto nº 10.540/2020, Lei nº 13.709/2018 – LGPD (impactos em contratos de TI). Instruções Normativas da Administração Pública. IN SGD/ME nº 01/2019 – Planejamento das contratações de soluções de TI. IN SGD/ME nº 94/2022 – Governança, Gestão e Fiscalização de Contratos de TI. IN SGD/ME nº 65/2021 – Gestão de riscos em contratações de TI.', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
+                    { text: '1 Etapas da Contratação de Soluções de TI. Estudo técnico preliminar (ETP). Termo de Referência (TR) e Projeto Básico' },
+                    { text: '2 Tipos de Soluções e Modelos de Serviço. Contratação de software sob demanda, licenciamento, SaaS, IaaS, PaaS. Fábrica de software e sustentação de sistemas. Serviços de infraestrutura em nuvem e data center. Serviços gerenciados de TI e outsourcing' },
+                    { text: '3 Governança, Fiscalização e Gestão de Contratos. Papéis e responsabilidades: gestor, fiscal técnico, fiscal administrativo. Indicadores de nível de serviço (SLAs) e penalidades. Gestão de mudanças contratuais e reequilíbrio econômico-financeiro.' },
+                    { text: '4 Riscos e Controles em Contratações. Identificação, análise e resposta a riscos em contratos de TI. Controles internos aplicáveis às contratações públicas. Auditoria e responsabilização (jurídica e administrativa)' },
+                    { text: '5 Aspectos Técnicos e Estratégicos. Integração com o PDTIC e alinhamento com a estratégia institucional. Mapeamento e definição de requisitos técnicos e não funcionais. Sustentabilidade, acessibilidade e segurança da informação nos contratos' },
+                    { text: '6 Legislação e Normativos Aplicáveis. Lei nº 14.133/2021, Decreto nº 10.540/2020, Lei nº 13.709/2018 – LGPD (impactos em contratos de TI). Instruções Normativas da Administração Pública. IN SGD/ME nº 01/2019 – Planejamento das contratações de soluções de TI. IN SGD/ME nº 94/2022 – Governança, Gestão e Fiscalização de Contratos de TI. IN SGD/ME nº 65/2021 – Gestão de riscos em contratações de TI.' }
                 ],
                 inteligenciaArtificial: [
-                    { text: '1 Fundamentos de Machine Learning: conceitos e aplicações', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Redes Neurais e Deep Learning', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '3 Processamento de Linguagem Natural (NLP)', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' }
+                    { text: '1 Aprendizado de Máquina: supervisionado, não supervisionado, semi-supervisionado, aprendizado por reforço, análise preditiva.' },
+                    { text: '2 Redes Neurais e Deep Learning. Arquiteturas de redes neurais, Frameworks, técnicas de treinamento e aplicações' },
+                    { text: '3 Processamento de linguagem natural. Modelos, pré-processamento, agentes inteligentes e sistemas multiagentes.' },
+                    { text: '4 Inteligência Artificial Generativa' },
+                    { text: '5 Arquitetura e engenharia de sistemas de IA. MLOps. Deploy de modelos. Integração com computação em nuvem' },
+                    { text: '6 Ética, Transparência e Responsabilidade em IA. Explicabilidade e interpretabilidade de modelos. Viés algorítmico e discriminação. LGPD e impactos regulatórios da IA. Princípios éticos para uso de IA.' }
                 ],
                 computacaoNuvem: [
-                    { text: '1 Modelos de serviço: IaaS, PaaS, SaaS', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Arquitetura e segurança em nuvem', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' }
+                    { text: '1 Fundamentos de Computação em Nuvem. Modelos de serviço: IaaS, PaaS, SaaS. Modelos de implantação: nuvem pública, privada, híbrida. Arquitetura orientada a serviços (SOA) e microsserviços. Elasticidade, escalabilidade e alta disponibilidade' },
+                    { text: '2 Plataformas e Serviços de Nuvem: AWS, Microsoft Azure e Google Cloud Platform.' },
+                    { text: '3 Arquitetura de Soluções em Nuvem. Design de sistemas distribuídos resilientes. Arquiteturas serverless e event-driven. Balanceamento de carga e auto escalonamento. Containers e orquestração (Docker, Kubernetes)' },
+                    { text: '4 Redes e Segurança em Nuvem. VPNs, sub-redes, gateways e grupos de segurança. Gestão de identidade e acesso (IAM, RBAC, MFA). Criptografia em trânsito e em repouso (TLS, KMS). Zero Trust Architecture em ambientes de nuvem. VPNs site-to-site, Direct Connect, ExpressRoute' },
+                    { text: '5 DevOps, CI/CD e Infraestrutura como Código (IaC). Ferrramentas: Terraform. Pipelines de integração e entrega contínua (Jenkins, GitHub Actions). Observabilidade: monitoramento, logging, tracing (CloudWatch, Azure Monitor, GCloud Monitoring).' },
+                    { text: '6 Governança, Compliance e Custos. Gerenciamento de custos e otimização de recursos. Políticas de uso e governança em nuvem (tagueamento, cotas, limites). Conformidade com normas e padrões (ISO/IEC 27001, NIST 800-53, LGPD). FinOps' },
+                    { text: '7 Armazenamento e Processamento de Dados. Tipos de armazenamento: objetos, blocos, arquivos. Data Lakes e processamento distribuído. Integração com Big Data e A' },
+                    { text: '8 Migração e Modernização de Aplicações. Estratégias de migração. Ferramentas de migração (AWS Migration Hub, Azure Migrate, GCloud Migration Center).' },
+                    { text: '9 Multicloud. Arquiteturas multicloud e híbridas; Nuvem soberana e soberania de dados' },
+                    { text: '10 Normas sobre computação em nuvem no governo federal.' }
                 ],
                 segurancaInformacao: [
-                    { text: '1 Políticas de segurança da informação', url: 'https://youtu.be/nJ-se2-RROg?si=T9lAL1grCjaKO3To' },
-                    { text: '2 Gestão de riscos e continuidade de negócios', url: 'https://youtu.be/nJ-se2-RROg?si=T9lAL1grCjaKO3To' }
+                    { text: '1 Gestão de Identidades e Acesso. Autenticação e Autorização, Single Sign-On (SSO), Security Assertion Markup Language (SAML), OAuth2 e OpenId Connect' },
+                    { text: '2 Privacidade e segurança por padrão.' },
+                    { text: '3 Malware. virus, keylogger, trojan, spyware, backdoor, worms, rootkit, adware, fileless, ransomware.' },
+                    { text: '4 Controles e testes de segurança para aplicações Web e Web Services.' },
+                    { text: '5 Múltiplos Fatores de Autenticação (MFA)' },
+                    { text: '6 Soluções para Segurança da Informação. Firewall, Intrusion Detection System (IDS), Intrusion Prevention System (IPS), Security Information and Event Management (SIEM), Proxy, Identity Access Management (IAM), Privileged Access Management (PAM), Antivírus, Antispam.' },
+                    { text: '7 Frameworks de segurança da informação e segurança cibernética. MITRE ATT&CK, CIS Controls e NIST CyberSecurity Framework (NIST CSF)' },
+                    { text: '8 Tratamento de Incidentes Cibernéticos' },
+                    { text: '9 Assinatura e certificação digital, criptografia e proteção de dados em trânsito e em repouso' },
+                    { text: '10 Segurança em nuvens e de contêineres' },
+                    { text: '11 Ataques a redes de computadores. DoS, DDoS, botnets, phishing, zero-day exploits, ping da morte, UDP Flood, MAC flooding, IP spoofing, ARP spoofing, buffer overflow, SQL injection, Cross-Site Scripting (XSS), DNS Poisoning.' }
                 ],
                 engenhariaSoftware: [
-                    { text: '1 Padrões de projeto e arquitetura de software', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Qualidade de software e testes', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' }
+                    { text: '1 Arquitetura de Software. Padrões arquiteturais. Monolito. Microserviços, Serverless. Arquitetura orientada à eventos e mensageria. Padrões de integração (API Gateway, Service Mesh, CQRS). ' },
+                    { text: '2 Design e Programação. Padrões de projeto (GoF e Grasp). Concorrência, paralelismo, multithreading e programação assíncrona.' },
+                    { text: '3 APIs e Integrações. Design e versionamento de APIs RESTful. Boas práticas de autenticação/autorização (OAuth2, JWT, OpenID Connect).' },
+                    { text: '4 Persistência de Dados. Modelagem relacional e normalização. Bancos NoSQL (MongoDB e ElasticSearch). Versionamento e migração de esquemas.' },
+                    { text: '5 DevOps e Integração Contínua. Pipelines de CI/CD (GitHub Actions). Build, testes e deploy automatizados. Docker e orquestração com Kubernetes. Monitoramento e observabilidade: Grafana e New Relic.' },
+                    { text: '6 Testes e Qualidade de Código. Testes automatizados: unitários, integração, contrato (API). Análise estática de código e cobertura (SonarQube). ' },
+                    { text: '7 Linguagens de programação Java' },
+                    { text: '8 Desenvolvimento seguro. DevSecOps' }
                 ],
                 engenhariaDados: [
-                    { text: '1 Modelagem de dados e bancos de dados', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Big Data e Data Warehousing', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' }
+                    { text: '1 Bancos de Dados. Relacionais: Oracle e Microsoft SQL Server. Não relacionais (NoSQL): Elasticsearch e MongoDB. Modelagens de dados. Relacional, multidimensional, nosql. SQL (Procedural Language / Structured Query Language).' },
+                    { text: '2 Arquitetura de Inteligência de Negócio. DataWarehouse, DataMart, DataLake, DataMesh. ' },
+                    { text: '3 Conectores e integração com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
+                    { text: '4 Fluxo de manipulação de dados. ETL. Pepiline de dados: versionamento, logging e auditoria, tolerância a falhas, retries e checkpoints, Integração com CI/CD' },
+                    { text: '5 Governança e Qualidade de Dados. Linhagem e catalogação. Qualidade de dados: validação, conformidade, deduplicação. Metadados, glossários de dados, políticas de acesso.' },
+                    { text: '6 Integração com nuvem. Serviços gerenciados (Azure Data Factory, Azure Service Fabric, Azure Databricks). Armazenamento (S3, Azure Blob, GCS). Integração com serviços de IA e análise.' }
                 ],
                 infraestruturaTI: [
-                    { text: '1 Redes de computadores e telecomunicações', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' },
-                    { text: '2 Virtualização e containers', url: 'https://drive.google.com/file/d/1ALg8qfYxj-mLhzzJG2Wg5zZUcvXGtkTW/view?usp=sharing' }
+                    { text: '1 Arquitetura Infraestrutura de TI. Topologias físicas e lógicas de redes corporativas. Arquiteturas de data center (on-premises, cloud, híbrida). Infraestrutura hiperconvergente. Arquitetura escalável, tolerante a falhas e redundante' },
+                    { text: '2 Redes e Comunicação de Dados. Protocolos de comunicação de dados TCP, UDP, SCTP, ARP, TLS, SSL, OSPF, BGP, DNS, DHCP, ICMP, FTP, SFTP, SSH, HTTP, HTTPS, SMTP, IMAP, POP3. VLANs, STP, QoS, roteamento e switching em ambientes corporativos. SDN (Software Defined Networking) e redes programáveis. Wireless corporativo: Wi-Fi 6, WPA3, roaming, mesh.' },
+                    { text: '3 Sistemas Operacionais e Servidores. Administração avançada de Linux e Windows Server. Virtualização (KVM, VMware vSphere/ESXi. Serviços de diretório (Active Directory, LDAP). Gerenciamento de usuários, permissões, GPOs.' },
+                    { text: '4 Armazenamento e Backup. SAN, NAS, DAS: arquiteturas e protocolos (iSCSI, NFS, SMB). RAID (níveis, vantagens, hot-spare). Backup e recuperação: RPO, RTO, snapshots, deduplicação. Oracle RMAN' },
+                    { text: '5 Segurança de Infraestrutura. Hardening de servidores e dispositivos de rede. Firewalls (NGFW), IDS/IPS, proxies, NAC. VPNs, SSL/TLS, PKI, criptografia de dados. Segmentação de rede e zonas de segurança.' },
+                    { text: '6 Monitoramento, Gestão e Automação. Ferramentas: Zabbix, New Relic e Grafana. Gerência de capacidade, disponibilidade e desempenho. ITIL v4: incidentes, problemas, mudanças e configurações (CMDB). Scripts e automação com PowerShell, Bash e Puppet. ' },
+                    { text: '7 Alta Disponibilidade e Recuperação de Desastres. Clusters de alta disponibilidade e balanceamento de carga. Failover, heartbeat, fencing. Planos de continuidade de negócios e testes de DR' }
                 ]
             },
-            'PF': {
+            'TCE_RJ': {
                 gestaoTI: [
-                    { text: 'Gestão de TI para Polícia Federal - ITIL e COBIT', url: '#' }
+                    { text: 'Gestão de TI para TCE RJ - ITIL e COBIT' }
                 ],
                 segurancaInformacao: [
-                    { text: 'Segurança da Informação em Órgãos de Segurança Pública', url: '#' }
+                    { text: 'Segurança da Informação em Tribunais de Contas' }
                 ]
             },
-            'BB': {
+            'TCE_SC': {
                 gestaoTI: [
-                    { text: 'Governança de TI no Setor Bancário', url: '#' }
+                    { text: 'Gestão de TI para TCE SC - ITIL e COBIT' }
                 ],
                 segurancaInformacao: [
-                    { text: 'Segurança Cibernética em Instituições Financeiras', url: '#' }
+                    { text: 'Segurança da Informação em Tribunais de Contas' }
                 ]
             }
         };
 
+        // Sistema de progresso
+        let progressData = JSON.parse(localStorage.getItem('progressData')) || {};
+        let linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+        
+        // Função para salvar progresso
+        function saveProgress() {
+            localStorage.setItem('progressData', JSON.stringify(progressData));
+            localStorage.setItem('linkData', JSON.stringify(linkData));
+            updateProgressDisplay();
+        }
+        
+        // Função para atualizar o display de progresso
+        function updateProgressDisplay() {
+            let totalItems = 0;
+            let completedItems = 0;
+            
+            // Calcula progresso geral
+            for (const org in progressData) {
+                for (const category in progressData[org]) {
+                    for (const item in progressData[org][category]) {
+                        totalItems++;
+                        if (progressData[org][category][item]) {
+                            completedItems++;
+                        }
+                    }
+                }
+            }
+            
+            // Atualiza barra de progresso geral
+            const progressPercent = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+            document.getElementById('overallProgress').style.width = `${progressPercent}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progressPercent)}% concluído (${completedItems}/${totalItems} itens)`;
+            
+            // Atualiza progresso por categoria
+            const categories = [
+                'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
+                'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
+                'engenhariaDados', 'infraestruturaTI'
+            ];
+            
+            const currentOrg = document.getElementById('stateName').textContent;
+            if (currentOrg && progressData[currentOrg]) {
+                categories.forEach(category => {
+                    const categoryData = progressData[currentOrg][category] || {};
+                    const categoryItems = Object.keys(categoryData).length;
+                    const completedCategoryItems = Object.values(categoryData).filter(val => val).length;
+                    
+                    const progressElement = document.getElementById(`${category}Progress`);
+                    if (progressElement) {
+                        progressElement.textContent = `${completedCategoryItems}/${categoryItems}`;
+                    }
+                });
+            }
+        }
+        
+        // Função para criar um item de conteúdo
+        function createContentItem(text, org, category, index) {
+            const itemId = `${org}-${category}-${index}`;
+            const isCompleted = progressData[org] && progressData[org][category] && progressData[org][category][itemId];
+            const itemLink = linkData[itemId] || null;
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.className = `content-item ${isCompleted ? 'completed' : ''}`;
+            itemDiv.dataset.itemId = itemId;
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.className = 'content-checkbox';
+            checkbox.checked = isCompleted;
+            
+            checkbox.addEventListener('change', function() {
+                // Atualiza dados de progresso
+                if (!progressData[org]) progressData[org] = {};
+                if (!progressData[org][category]) progressData[org][category] = {};
+                progressData[org][category][itemId] = this.checked;
+                
+                // Atualiza visual
+                itemDiv.classList.toggle('completed', this.checked);
+                
+                saveProgress();
+            });
+            
+            const textSpan = document.createElement('span');
+            textSpan.className = 'content-text';
+            textSpan.textContent = text;
+            
+            itemDiv.appendChild(checkbox);
+            itemDiv.appendChild(textSpan);
+            
+            // Botão/link para resumo
+            if (itemLink) {
+                const link = document.createElement('a');
+                link.href = itemLink;
+                link.className = 'content-link';
+                link.textContent = 'Ver Resumo';
+                link.target = '_blank';
+                itemDiv.appendChild(link);
+            } else {
+                const addLinkBtn = document.createElement('button');
+                addLinkBtn.className = 'add-link-btn';
+                addLinkBtn.textContent = '+ Link';
+                addLinkBtn.addEventListener('click', function() {
+                    showLinkInput(itemId, itemDiv);
+                });
+                itemDiv.appendChild(addLinkBtn);
+            }
+            
+            // Container para input de link
+            const linkInputContainer = document.createElement('div');
+            linkInputContainer.className = 'link-input-container';
+            
+            const linkInput = document.createElement('input');
+            linkInput.type = 'text';
+            linkInput.className = 'link-input';
+            linkInput.placeholder = 'Cole aqui o link para seu resumo...';
+            
+            const linkActions = document.createElement('div');
+            linkActions.className = 'link-actions';
+            
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'link-save';
+            saveBtn.textContent = 'Salvar';
+            
+            const cancelBtn = document.createElement('button');
+            cancelBtn.className = 'link-cancel';
+            cancelBtn.textContent = 'Cancelar';
+            
+            linkActions.appendChild(saveBtn);
+            linkActions.appendChild(cancelBtn);
+            
+            linkInputContainer.appendChild(linkInput);
+            linkInputContainer.appendChild(linkActions);
+            
+            itemDiv.appendChild(linkInputContainer);
+            
+            return itemDiv;
+        }
+        
+        // Função para mostrar input de link
+        function showLinkInput(itemId, itemDiv) {
+            const linkInputContainer = itemDiv.querySelector('.link-input-container');
+            const addLinkBtn = itemDiv.querySelector('.add-link-btn');
+            
+            addLinkBtn.style.display = 'none';
+            linkInputContainer.style.display = 'block';
+            
+            const linkInput = linkInputContainer.querySelector('.link-input');
+            const saveBtn = linkInputContainer.querySelector('.link-save');
+            const cancelBtn = linkInputContainer.querySelector('.link-cancel');
+            
+            // Foca no input
+            linkInput.focus();
+            
+            // Salvar link
+            saveBtn.onclick = function() {
+                const url = linkInput.value.trim();
+                if (url) {
+                    linkData[itemId] = url;
+                    saveProgress();
+                    
+                    // Recria o item para atualizar a interface
+                    const org = itemId.split('-')[0];
+                    const category = itemId.split('-')[1];
+                    const index = itemId.split('-')[2];
+                    const text = itemDiv.querySelector('.content-text').textContent;
+                    
+                    const newItem = createContentItem(text, org, category, index);
+                    itemDiv.parentNode.replaceChild(newItem, itemDiv);
+                }
+            };
+            
+            // Cancelar
+            cancelBtn.onclick = function() {
+                linkInputContainer.style.display = 'none';
+                addLinkBtn.style.display = 'block';
+            };
+        }
+        
+        // Filtros
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // Atualiza botões ativos
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                const filter = this.dataset.filter;
+                filterContentItems(filter);
+            });
+        });
+        
+        function filterContentItems(filter) {
+            const allItems = document.querySelectorAll('.content-item');
+            
+            allItems.forEach(item => {
+                const isCompleted = item.classList.contains('completed');
+                
+                switch(filter) {
+                    case 'all':
+                        item.style.display = 'flex';
+                        break;
+                    case 'pending':
+                        item.style.display = isCompleted ? 'none' : 'flex';
+                        break;
+                    case 'completed':
+                        item.style.display = isCompleted ? 'flex' : 'none';
+                        break;
+                }
+            });
+        }
+        
         // Adiciona eventos de clique para cada botão de órgão
         document.querySelectorAll('.state-btn').forEach(btn => {
             btn.addEventListener('click', function() {
@@ -592,25 +860,22 @@
                     }
                 });
                 
-                // Verifica se há links para este órgão
+                // Verifica se há dados para este órgão
                 if (stateLinks[stateId]) {
                     const links = stateLinks[stateId];
                     
-                    // Adiciona links para cada categoria
+                    // Adiciona conteúdo para cada categoria
                     categories.forEach(category => {
                         const elementId = category + 'Links';
                         const element = document.getElementById(elementId);
                         
                         if (element && links[category] && links[category].length > 0) {
-                            links[category].forEach(link => {
-                                const a = document.createElement('a');
-                                a.href = link.url;
-                                a.textContent = link.text;
-                                a.target = '_blank';
-                                element.appendChild(a);
+                            links[category].forEach((item, index) => {
+                                const contentItem = createContentItem(item.text, stateName, category, index);
+                                element.appendChild(contentItem);
                             });
                         } else if (element) {
-                            element.innerHTML = '<p>Nenhum material disponível no momento</p>';
+                            element.innerHTML = '<p>Nenhum conteúdo disponível no momento</p>';
                         }
                     });
                 } else {
@@ -625,6 +890,9 @@
                 
                 // Mostra a seção de informações
                 document.getElementById('stateInfo').style.display = 'block';
+                
+                // Atualiza display de progresso
+                updateProgressDisplay();
                 
                 // Rola a página até a seção de informações
                 document.getElementById('stateInfo').scrollIntoView({ behavior: 'smooth' });
@@ -645,68 +913,8 @@
             });
         });
         
-        // Carrossel de Imagens
-        const carousel = document.getElementById('carousel');
-        const slides = document.querySelectorAll('.carousel-slide');
-        const dots = document.querySelectorAll('.carousel-dot');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-        let currentSlide = 0;
-        const slideCount = slides.length;
-        let slideInterval;
-        
-        // Inicia o carrossel
-        function startCarousel() {
-            slideInterval = setInterval(() => {
-                currentSlide = (currentSlide + 1) % slideCount;
-                updateCarousel();
-            }, 5000);
-        }
-        
-        // Atualiza a posição do carrossel
-        function updateCarousel() {
-            carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-            
-            // Atualiza os dots ativos
-            dots.forEach((dot, index) => {
-                if (index === currentSlide) {
-                    dot.classList.add('active');
-                } else {
-                    dot.classList.remove('active');
-                }
-            });
-        }
-        
-        // Navegação por dots
-        dots.forEach(dot => {
-            dot.addEventListener('click', function() {
-                currentSlide = parseInt(this.getAttribute('data-slide'));
-                updateCarousel();
-                resetInterval();
-            });
-        });
-        
-        // Botões de navegação
-        prevBtn.addEventListener('click', function() {
-            currentSlide = (currentSlide - 1 + slideCount) % slideCount;
-            updateCarousel();
-            resetInterval();
-        });
-        
-        nextBtn.addEventListener('click', function() {
-            currentSlide = (currentSlide + 1) % slideCount;
-            updateCarousel();
-            resetInterval();
-        });
-        
-        // Reinicia o intervalo do carrossel
-        function resetInterval() {
-            clearInterval(slideInterval);
-            startCarousel();
-        }
-        
-        // Inicia o carrossel
-        startCarousel();
+        // Inicializa o display de progresso
+        updateProgressDisplay();
     </script>
 </body>
 </html>
