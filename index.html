@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meta TI - Sistema de Estudos</title>
     <style>
+        /* [MANTENHA TODO O CSS ANTERIOR] */
+        /* ... todo o CSS permanece igual ... */
         * {
             box-sizing: border-box;
         }
@@ -232,8 +235,13 @@
             flex: 1;
         }
         
-        .content-link {
+        .content-actions {
+            display: flex;
+            gap: 5px;
             margin-left: 10px;
+        }
+        
+        .content-link {
             padding: 5px 10px;
             background-color: #3498db;
             color: white;
@@ -241,14 +249,30 @@
             border-radius: 4px;
             font-size: 0.8em;
             transition: background-color 0.3s;
+            white-space: nowrap;
         }
         
         .content-link:hover {
             background-color: #2980b9;
         }
         
+        .edit-link-btn {
+            padding: 5px 8px;
+            background-color: #f39c12;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.8em;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            white-space: nowrap;
+        }
+        
+        .edit-link-btn:hover {
+            background-color: #e67e22;
+        }
+        
         .add-link-btn {
-            margin-left: 10px;
             padding: 5px 10px;
             background-color: #95a5a6;
             color: white;
@@ -257,6 +281,7 @@
             font-size: 0.8em;
             cursor: pointer;
             transition: background-color 0.3s;
+            white-space: nowrap;
         }
         
         .add-link-btn:hover {
@@ -270,6 +295,7 @@
             background-color: #f8f9fa;
             border-radius: 4px;
             border: 1px solid #e0e0e0;
+            grid-column: 1 / -1;
         }
         
         .link-input {
@@ -286,7 +312,7 @@
             gap: 5px;
         }
         
-        .link-save, .link-cancel {
+        .link-save, .link-cancel, .link-remove {
             padding: 5px 10px;
             border: none;
             border-radius: 4px;
@@ -304,9 +330,14 @@
             color: white;
         }
         
+        .link-remove {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
         .state-categories {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
             gap: 20px;
         }
         
@@ -402,15 +433,24 @@
                 align-items: flex-start;
             }
             
-            .content-link, .add-link-btn {
+            .content-actions {
                 margin-left: 0;
                 margin-top: 5px;
+                width: 100%;
+                justify-content: flex-start;
+            }
+            
+            .content-link, .edit-link-btn, .add-link-btn {
+                flex: 1;
+                text-align: center;
             }
         }
+    
     </style>
 </head>
 <body>
-    <!-- Menu Superior -->
+    <!-- [MANTENHA TODO O HTML ANTERIOR] -->
+    <!-- ... todo o HTML permanece igual ... -->
     <div class="top-menu">
         <a href="#" class="logo">Concursos TI</a>
         <div class="menu-toggle">☰</div>
@@ -713,23 +753,38 @@
             itemDiv.appendChild(checkbox);
             itemDiv.appendChild(textSpan);
             
-            // Botão/link para resumo
+            // Container para ações
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'content-actions';
+            
+            // Link para resumo
             if (itemLink) {
                 const link = document.createElement('a');
                 link.href = itemLink;
                 link.className = 'content-link';
                 link.textContent = 'Ver Resumo';
                 link.target = '_blank';
-                itemDiv.appendChild(link);
+                actionsDiv.appendChild(link);
+                
+                // Botão para editar link
+                const editBtn = document.createElement('button');
+                editBtn.className = 'edit-link-btn';
+                editBtn.textContent = 'Editar';
+                editBtn.addEventListener('click', function() {
+                    showLinkInput(itemId, itemDiv, true);
+                });
+                actionsDiv.appendChild(editBtn);
             } else {
                 const addLinkBtn = document.createElement('button');
                 addLinkBtn.className = 'add-link-btn';
                 addLinkBtn.textContent = '+ Link';
                 addLinkBtn.addEventListener('click', function() {
-                    showLinkInput(itemId, itemDiv);
+                    showLinkInput(itemId, itemDiv, false);
                 });
-                itemDiv.appendChild(addLinkBtn);
+                actionsDiv.appendChild(addLinkBtn);
             }
+            
+            itemDiv.appendChild(actionsDiv);
             
             // Container para input de link
             const linkInputContainer = document.createElement('div');
@@ -751,8 +806,13 @@
             cancelBtn.className = 'link-cancel';
             cancelBtn.textContent = 'Cancelar';
             
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'link-remove';
+            removeBtn.textContent = 'Remover';
+            
             linkActions.appendChild(saveBtn);
             linkActions.appendChild(cancelBtn);
+            linkActions.appendChild(removeBtn);
             
             linkInputContainer.appendChild(linkInput);
             linkInputContainer.appendChild(linkActions);
@@ -763,16 +823,26 @@
         }
         
         // Função para mostrar input de link
-        function showLinkInput(itemId, itemDiv) {
+        function showLinkInput(itemId, itemDiv, isEditing) {
             const linkInputContainer = itemDiv.querySelector('.link-input-container');
-            const addLinkBtn = itemDiv.querySelector('.add-link-btn');
+            const actionsDiv = itemDiv.querySelector('.content-actions');
             
-            addLinkBtn.style.display = 'none';
+            actionsDiv.style.display = 'none';
             linkInputContainer.style.display = 'block';
             
             const linkInput = linkInputContainer.querySelector('.link-input');
             const saveBtn = linkInputContainer.querySelector('.link-save');
             const cancelBtn = linkInputContainer.querySelector('.link-cancel');
+            const removeBtn = linkInputContainer.querySelector('.link-remove');
+            
+            // Preenche o input se estiver editando
+            if (isEditing) {
+                linkInput.value = linkData[itemId] || '';
+                removeBtn.style.display = 'block';
+            } else {
+                linkInput.value = '';
+                removeBtn.style.display = 'none';
+            }
             
             // Foca no input
             linkInput.focus();
@@ -795,10 +865,25 @@
                 }
             };
             
+            // Remover link
+            removeBtn.onclick = function() {
+                delete linkData[itemId];
+                saveProgress();
+                
+                // Recria o item para atualizar a interface
+                const org = itemId.split('-')[0];
+                const category = itemId.split('-')[1];
+                const index = itemId.split('-')[2];
+                const text = itemDiv.querySelector('.content-text').textContent;
+                
+                const newItem = createContentItem(text, org, category, index);
+                itemDiv.parentNode.replaceChild(newItem, itemDiv);
+            };
+            
             // Cancelar
             cancelBtn.onclick = function() {
                 linkInputContainer.style.display = 'none';
-                addLinkBtn.style.display = 'block';
+                actionsDiv.style.display = 'flex';
             };
         }
         
@@ -916,5 +1001,126 @@
         // Inicializa o display de progresso
         updateProgressDisplay();
     </script>
+
+    <script>
+        // Configuração do Google Apps Script
+        const SCRIPT_URL = 'https://script.google.com/macros/s/https://script.google.com/macros/s/AKfycbzb3YPhUx9smYp8YCU-pWY_vcbaFkkF03aentkKH3ZqNAt-Ug4xDSgGHBu42WvOsHOe/exec'; // Substitua pelo seu URL
+
+        // Sistema de progresso - agora vazio, será carregado do servidor
+        let progressData = {};
+        let linkData = {};
+        
+        // Função para fazer requisições para o Google Apps Script
+        async function makeRequest(action, data = {}) {
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: action,
+                        data: data
+                    })
+                });
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                console.error('Erro na requisição:', error);
+                // Fallback para localStorage se o servidor estiver offline
+                return loadFromLocalStorage(action);
+            }
+        }
+
+        // Fallback para localStorage
+        function loadFromLocalStorage(action) {
+            if (action === 'getProgress') {
+                return {
+                    success: true,
+                    progressData: JSON.parse(localStorage.getItem('progressData')) || {},
+                    linkData: JSON.parse(localStorage.getItem('linkData')) || {}
+                };
+            }
+            return { success: false };
+        }
+
+        // Função para salvar progresso
+        async function saveProgress() {
+            // Salva localmente como fallback
+            localStorage.setItem('progressData', JSON.stringify(progressData));
+            localStorage.setItem('linkData', JSON.stringify(linkData));
+            
+            // Tenta salvar no servidor
+            try {
+                const result = await makeRequest('saveProgress', {
+                    progressData: progressData,
+                    linkData: linkData
+                });
+                
+                if (!result.success) {
+                    console.warn('Não foi possível salvar no servidor, usando localStorage');
+                }
+            } catch (error) {
+                console.warn('Servidor offline, dados salvos localmente');
+            }
+            
+            updateProgressDisplay();
+        }
+
+        // Função para carregar progresso
+        async function loadProgress() {
+            try {
+                const result = await makeRequest('getProgress');
+                
+                if (result.success) {
+                    progressData = result.progressData || {};
+                    linkData = result.linkData || {};
+                } else {
+                    // Fallback para localStorage
+                    progressData = JSON.parse(localStorage.getItem('progressData')) || {};
+                    linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                }
+            } catch (error) {
+                console.warn('Erro ao carregar do servidor, usando localStorage');
+                progressData = JSON.parse(localStorage.getItem('progressData')) || {};
+                linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+            }
+            
+            updateProgressDisplay();
+        }
+
+        // [MANTENHA TODAS AS OUTRAS FUNÇÕES ANTERIORES]
+        // ... todo o resto do JavaScript permanece igual ...
+        // APENAS REMOVA as linhas que definem progressData e linkData no início
+
+        // Modifique o evento de clique dos botões de órgão para carregar os dados
+        document.querySelectorAll('.state-btn').forEach(btn => {
+            btn.addEventListener('click', async function() {
+                const stateId = this.getAttribute('data-state');
+                const stateName = this.textContent;
+                
+                // Carrega os dados mais recentes
+                await loadProgress();
+                
+                // [RESTANTE DO CÓDIGO PERMANECE IGUAL]
+                document.getElementById('stateName').textContent = stateName;
+                // ... resto do código ...
+            });
+        });
+
+        // Carrega os dados quando a página inicia
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProgress();
+            // [RESTANTE DA INICIALIZAÇÃO]
+        });
+    </script>
 </body>
 </html>
+
+
+
+
+
+
+
