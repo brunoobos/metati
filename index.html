@@ -694,7 +694,43 @@
         let progressData = {};
         let linkData = {};
         let isOnline = false;
+        
+// Adicione esta função no seu script HTML
+async function testConnection() {
+    try {
+        console.log('Testando conexão com Google Apps Script...');
+        const response = await fetch(SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'getProgress'
+            })
+        });
+        
+        const result = await response.json();
+        console.log('Resposta do servidor:', result);
+        return result;
+    } catch (error) {
+        console.error('Erro na conexão:', error);
+        return { success: false, error: error.message };
+    }
+}
 
+// Chame esta função no carregamento da página
+document.addEventListener('DOMContentLoaded', async function() {
+    console.log('Iniciando aplicação...');
+    console.log('URL do Script:', SCRIPT_URL);
+    
+    // Testa a conexão
+    await testConnection();
+    
+    // Carrega os dados normalmente
+    await loadProgress();
+    updateProgressDisplay();
+    updateSyncStatus();
+});
         // Função para fazer requisições para o Google Apps Script
         async function makeRequest(action, data = {}) {
             try {
