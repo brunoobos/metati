@@ -532,10 +532,24 @@
             text-align: center;
         }
         
-        .current-discipline {
-            font-size: 1.8em;
+        .current-disciplines {
+            font-size: 1.4em;
             font-weight: bold;
             margin: 10px 0;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .discipline-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            margin: 2px;
+            font-size: 0.9em;
         }
         
         .day-info {
@@ -593,6 +607,25 @@
             border-radius: 8px;
             margin: 15px 0;
             display: none;
+        }
+        
+        .disciplines-per-day {
+            margin-top: 10px;
+        }
+        
+        .disciplines-per-day label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .disciplines-per-day select {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 100%;
+            max-width: 200px;
         }
         
         @media (max-width: 768px) {
@@ -680,6 +713,10 @@
                 width: 100%;
                 text-align: center;
             }
+            
+            .current-disciplines {
+                font-size: 1.2em;
+            }
         }
     </style>
 </head>
@@ -747,36 +784,49 @@
                 <h4>Escolha as disciplinas para o ciclo:</h4>
                 <div class="discipline-checkboxes">
                     <label class="discipline-option">
-                        <input type="checkbox" value="gestaoTI" checked> GESTÃO DE TI
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="contratacaoTI" checked> CONTRATAÇÕES DE TI
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="inteligenciaArtificial" checked> INTELIGÊNCIA ARTIFICIAL
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="computacaoNuvem" checked> COMPUTAÇÃO EM NUVEM
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="segurancaInformacao" checked> SEGURANÇA DA INFORMAÇÃO
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="engenhariaSoftware" checked> ENGENHARIA DE SOFTWARE
+                        <input type="checkbox" value="infraestruturaTI" checked> INFRAESTRUTURA DE TI
                     </label>
                     <label class="discipline-option">
                         <input type="checkbox" value="engenhariaDados" checked> ENGENHARIA DE DADOS
                     </label>
                     <label class="discipline-option">
-                        <input type="checkbox" value="infraestruturaTI" checked> INFRAESTRUTURA DE TI
+                        <input type="checkbox" value="engenhariaSoftware" checked> ENGENHARIA DE SOFTWARE
+                    </label>
+                    <label class="discipline-option">
+                        <input type="checkbox" value="segurancaInformacao" checked> SEGURANÇA DA INFORMAÇÃO
+                    </label>
+                    <label class="discipline-option">
+                        <input type="checkbox" value="computacaoNuvem" checked> COMPUTAÇÃO EM NUVEM
+                    </label>
+                    <label class="discipline-option">
+                        <input type="checkbox" value="inteligenciaArtificial" checked> INTELIGÊNCIA ARTIFICIAL
+                    </label>
+                    <label class="discipline-option">
+                        <input type="checkbox" value="contratacaoTI" checked> CONTRATAÇÕES DE TI
+                    </label>
+                    <label class="discipline-option">
+                        <input type="checkbox" value="gestaoTI" checked> GESTÃO DE TI
                     </label>
                 </div>
+                
+                <div class="disciplines-per-day">
+                    <label for="disciplinesPerDay">Disciplinas por dia:</label>
+                    <select id="disciplinesPerDay">
+                        <option value="1">1 disciplina</option>
+                        <option value="2" selected>2 disciplinas</option>
+                        <option value="3">3 disciplinas</option>
+                        <option value="4">4 disciplinas</option>
+                    </select>
+                </div>
+                
                 <button class="cycle-btn" id="confirmDisciplinesBtn" style="margin-top: 15px;">Confirmar Disciplinas</button>
             </div>
             
             <div class="current-day-card" id="currentDayCard" style="display: none;">
                 <div class="day-info">Dia <span id="currentDayNumber">1</span> de <span id="totalDays">7</span></div>
-                <div class="current-discipline" id="currentDisciplineName">Disciplina</div>
+                <div class="current-disciplines" id="currentDisciplinesNames">
+                    <!-- As disciplinas serão inseridas aqui -->
+                </div>
                 <div class="day-info" id="cycleDate">Data do ciclo</div>
             </div>
             
@@ -827,34 +877,9 @@
             </div>
             
             <div class="state-categories">
-                <div class="category" data-disciplina="GESTÃO DE TI">
-                    <h3>GESTÃO DE TI <span class="category-progress" id="gestaoTIProgress">0/0</span></h3>
-                    <div class="links" id="gestaoTILinks"></div>
-                </div>
-                
-                <div class="category" data-disciplina="CONTRATAÇÕES DE TI">
-                    <h3>CONTRATAÇÕES DE TI <span class="category-progress" id="contratacaoTIProgress">0/0</span></h3>
-                    <div class="links" id="contratacaoTILinks"></div>
-                </div>
-                
-                <div class="category" data-disciplina="INTELIGÊNCIA ARTIFICIAL">
-                    <h3>INTELIGÊNCIA ARTIFICIAL <span class="category-progress" id="inteligenciaArtificialProgress">0/0</span></h3>
-                    <div class="links" id="inteligenciaArtificialLinks"></div>
-                </div>
-                
-                <div class="category" data-disciplina="COMPUTAÇÃO EM NUVEM">
-                    <h3>COMPUTAÇÃO EM NUVEM <span class="category-progress" id="computacaoNuvemProgress">0/0</span></h3>
-                    <div class="links" id="computacaoNuvemLinks"></div>
-                </div>
-
-                <div class="category" data-disciplina="SEGURANÇA DA INFORMAÇÃO">
-                    <h3>SEGURANÇA DA INFORMAÇÃO <span class="category-progress" id="segurancaInformacaoProgress">0/0</span></h3>
-                    <div class="links" id="segurancaInformacaoLinks"></div>
-                </div>
-                
-                <div class="category" data-disciplina="ENGENHARIA DE SOFTWARE">
-                    <h3>ENGENHARIA DE SOFTWARE <span class="category-progress" id="engenhariaSoftwareProgress">0/0</span></h3>
-                    <div class="links" id="engenhariaSoftwareLinks"></div>
+                <div class="category" data-disciplina="INFRAESTRUTURA DE TI">
+                    <h3>INFRAESTRUTURA DE TI <span class="category-progress" id="infraestruturaTIProgress">0/0</span></h3>
+                    <div class="links" id="infraestruturaTILinks"></div>
                 </div>
                 
                 <div class="category" data-disciplina="ENGENHARIA DE DADOS">
@@ -862,9 +887,34 @@
                     <div class="links" id="engenhariaDadosLinks"></div>
                 </div>
                 
-                <div class="category" data-disciplina="INFRAESTRUTURA DE TI">
-                    <h3>INFRAESTRUTURA DE TI <span class="category-progress" id="infraestruturaTIProgress">0/0</span></h3>
-                    <div class="links" id="infraestruturaTILinks"></div>
+                <div class="category" data-disciplina="ENGENHARIA DE SOFTWARE">
+                    <h3>ENGENHARIA DE SOFTWARE <span class="category-progress" id="engenhariaSoftwareProgress">0/0</span></h3>
+                    <div class="links" id="engenhariaSoftwareLinks"></div>
+                </div>
+
+                <div class="category" data-disciplina="SEGURANÇA DA INFORMAÇÃO">
+                    <h3>SEGURANÇA DA INFORMAÇÃO <span class="category-progress" id="segurancaInformacaoProgress">0/0</span></h3>
+                    <div class="links" id="segurancaInformacaoLinks"></div>
+                </div>
+                
+                <div class="category" data-disciplina="COMPUTAÇÃO EM NUVEM">
+                    <h3>COMPUTAÇÃO EM NUVEM <span class="category-progress" id="computacaoNuvemProgress">0/0</span></h3>
+                    <div class="links" id="computacaoNuvemLinks"></div>
+                </div>
+                
+                <div class="category" data-disciplina="INTELIGÊNCIA ARTIFICIAL">
+                    <h3>INTELIGÊNCIA ARTIFICIAL <span class="category-progress" id="inteligenciaArtificialProgress">0/0</span></h3>
+                    <div class="links" id="inteligenciaArtificialLinks"></div>
+                </div>
+                
+                <div class="category" data-disciplina="CONTRATAÇÕES DE TI">
+                    <h3>CONTRATAÇÕES DE TI <span class="category-progress" id="contratacaoTIProgress">0/0</span></h3>
+                    <div class="links" id="contratacaoTILinks"></div>
+                </div>
+                
+                <div class="category" data-disciplina="GESTÃO DE TI">
+                    <h3>GESTÃO DE TI <span class="category-progress" id="gestaoTIProgress">0/0</span></h3>
+                    <div class="links" id="gestaoTILinks"></div>
                 </div>
             </div>
         </div>
@@ -890,41 +940,35 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
         
-        // Dados atualizados com disciplinas de TI
+        // Dados atualizados com disciplinas de TI (nova ordem)
         const stateLinks = {
             'TCU': {
-                gestaoTI: [
-                    { text: '1 Gerenciamento de serviços (ITIL v4): conceitos básicos, estrutura e objetivos' },
-                    { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos' },
-                    { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD' }
+                infraestruturaTI: [
+                    { text: '1 Arquitetura Infraestrutura de TI. Topologias físicas e lógicas de redes corporativas. Arquiteturas de data center (on-premises, cloud, híbrida). Infraestrutura hiperconvergente. Arquitetura escalável, tolerante a falhas e redundante' },
+                    { text: '2 Redes e Comunicação de Dados. Protocolos de comunicação de dados TCP, UDP, SCTP, ARP, TLS, SSL, OSPF, BGP, DNS, DHCP, ICMP, FTP, SFTP, SSH, HTTP, HTTPS, SMTP, IMAP, POP3. VLANs, STP, QoS, roteamento e switching em ambientes corporativos. SDN (Software Defined Networking) e redes programáveis. Wireless corporativo: Wi-Fi 6, WPA3, roaming, mesh.' },
+                    { text: '3 Sistemas Operacionais e Servidores. Administração avançada de Linux e Windows Server. Virtualização (KVM, VMware vSphere/ESXi. Serviços de diretório (Active Directory, LDAP). Gerenciamento de usuários, permissões, GPOs.' },
+                    { text: '4 Armazenamento e Backup. SAN, NAS, DAS: arquiteturas e protocolos (iSCSI, NFS, SMB). RAID (níveis, vantagens, hot-spare). Backup e recuperação: RPO, RTO, snapshots, deduplicação. Oracle RMAN' },
+                    { text: '5 Segurança de Infraestrutura. Hardening de servidores e dispositivos de rede. Firewalls (NGFW), IDS/IPS, proxies, NAC. VPNs, SSL/TLS, PKI, criptografia de dados. Segmentação de rede e zonas de segurança.' },
+                    { text: '6 Monitoramento, Gestão e Automação. Ferramentas: Zabbix, New Relic e Grafana. Gerência de capacidade, disponibilidade e desempenho. ITIL v4: incidentes, problemas, mudanças e configurações (CMDB). Scripts e automação com PowerShell, Bash e Puppet. ' },
+                    { text: '7 Alta Disponibilidade e Recuperação de Desastres. Clusters de alta disponibilidade e balanceamento de carga. Failover, heartbeat, fencing. Planos de continuidade de negócios e testes de DR' }
                 ],
-                contratacaoTI: [
-                    { text: '1 Etapas da Contratação de Soluções de TI. Estudo técnico preliminar (ETP). Termo de Referência (TR) e Projeto Básico' },
-                    { text: '2 Tipos de Soluções e Modelos de Serviço. Contratação de software sob demanda, licenciamento, SaaS, IaaS, PaaS. Fábrica de software e sustentação de sistemas. Serviços de infraestrutura em nuvem e data center. Serviços gerenciados de TI e outsourcing' },
-                    { text: '3 Governança, Fiscalização e Gestão de Contratos. Papéis e responsabilidades: gestor, fiscal técnico, fiscal administrativo. Indicadores de nível de serviço (SLAs) e penalidades. Gestão de mudanças contratuais e reequilíbrio econômico-financeiro.' },
-                    { text: '4 Riscos e Controles em Contratações. Identificação, análise e resposta a riscos em contratos de TI. Controles internos aplicáveis às contratações públicas. Auditoria e responsabilização (jurídica e administrativa)' },
-                    { text: '5 Aspectos Técnicos e Estratégicos. Integração com o PDTIC e alinhamento com a estratégia institucional. Mapeamento e definição de requisitos técnicos e não funcionais. Sustentabilidade, acessibilidade e segurança da informação nos contratos' },
-                    { text: '6 Legislação e Normativos Aplicáveis. Lei nº 14.133/2021, Decreto nº 10.540/2020, Lei nº 13.709/2018 – LGPD (impactos em contratos de TI). Instruções Normativas da Administração Pública. IN SGD/ME nº 01/2019 – Planejamento das contratações de soluções de TI. IN SGD/ME nº 94/2022 – Governança, Gestão e Fiscalização de Contratos de TI. IN SGD/ME nº 65/2021 – Gestão de riscos em contratações de TI.' }
+                engenhariaDados: [
+                    { text: '1 Bancos de Dados. Relacionais: Oracle e Microsoft SQL Server. Não relacionais (NoSQL): Elasticsearch e MongoDB. Modelagens de dados. Relacional, multidimensional, nosql. SQL (Procedural Language / Structured Query Language).' },
+                    { text: '2 Arquitetura de Inteligência de Negócio. DataWarehouse, DataMart, DataLake, DataMesh. ' },
+                    { text: '3 Conectores e integração com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
+                    { text: '4 Fluxo de manipulação de dados. ETL. Pepiline de dados: versionamento, logging e auditoria, tolerância a falhas, retries e checkpoints, Integração com CI/CD' },
+                    { text: '5 Governança e Qualidade de Dados. Linhagem e catalogação. Qualidade de dados: validação, conformidade, deduplicação. Metadados, glossários de dados, políticas de acesso.' },
+                    { text: '6 Integração com nuvem. Serviços gerenciados (Azure Data Factory, Azure Service Fabric, Azure Databricks). Armazenamento (S3, Azure Blob, GCS). Integração com serviços de IA e análise.' }
                 ],
-                inteligenciaArtificial: [
-                    { text: '1 Aprendizado de Máquina: supervisionado, não supervisionado, semi-supervisionado, aprendizado por reforço, análise preditiva.' },
-                    { text: '2 Redes Neurais e Deep Learning. Arquiteturas de redes neurais, Frameworks, técnicas de treinamento e aplicações' },
-                    { text: '3 Processamento de linguagem natural. Modelos, pré-processamento, agentes inteligentes e sistemas multiagentes.' },
-                    { text: '4 Inteligência Artificial Generativa' },
-                    { text: '5 Arquitetura e engenharia de sistemas de IA. MLOps. Deploy de modelos. Integração com computação em nuvem' },
-                    { text: '6 Ética, Transparência e Responsabilidade em IA. Explicabilidade e interpretabilidade de modelos. Viés algorítmico e discriminação. LGPD e impactos regulatórios da IA. Princípios éticos para uso de IA.' }
-                ],
-                computacaoNuvem: [
-                    { text: '1 Fundamentos de Computação em Nuvem. Modelos de serviço: IaaS, PaaS, SaaS. Modelos de implantação: nuvem pública, privada, híbrida. Arquitetura orientada a serviços (SOA) e microsserviços. Elasticidade, escalabilidade e alta disponibilidade' },
-                    { text: '2 Plataformas e Serviços de Nuvem: AWS, Microsoft Azure e Google Cloud Platform.' },
-                    { text: '3 Arquitetura de Soluções em Nuvem. Design de sistemas distribuídos resilientes. Arquiteturas serverless e event-driven. Balanceamento de carga e auto escalonamento. Containers e orquestração (Docker, Kubernetes)' },
-                    { text: '4 Redes e Segurança em Nuvem. VPNs, sub-redes, gateways e grupos de segurança. Gestão de identidade e acesso (IAM, RBAC, MFA). Criptografia em trânsito e em repouso (TLS, KMS). Zero Trust Architecture em ambientes de nuvem. VPNs site-to-site, Direct Connect, ExpressRoute' },
-                    { text: '5 DevOps, CI/CD e Infraestrutura como Código (IaC). Ferrramentas: Terraform. Pipelines de integração e entrega contínua (Jenkins, GitHub Actions). Observabilidade: monitoramento, logging, tracing (CloudWatch, Azure Monitor, GCloud Monitoring).' },
-                    { text: '6 Governança, Compliance e Custos. Gerenciamento de custos e otimização de recursos. Políticas de uso e governança em nuvem (tagueamento, cotas, limites). Conformidade com normas e padrões (ISO/IEC 27001, NIST 800-53, LGPD). FinOps' },
-                    { text: '7 Armazenamento e Processamento de Dados. Tipos de armazenamento: objetos, blocos, arquivos. Data Lakes e processamento distribuído. Integração com Big Data e A' },
-                    { text: '8 Migração e Modernização de Aplicações. Estratégias de migração. Ferramentas de migração (AWS Migration Hub, Azure Migrate, GCloud Migration Center).' },
-                    { text: '9 Multicloud. Arquiteturas multicloud e híbridas; Nuvem soberana e soberania de dados' },
-                    { text: '10 Normas sobre computação em nuvem no governo federal.' }
+                engenhariaSoftware: [
+                    { text: '1 Arquitetura de Software. Padrões arquiteturais. Monolito. Microserviços, Serverless. Arquitetura orientada à eventos e mensageria. Padrões de integração (API Gateway, Service Mesh, CQRS). ' },
+                    { text: '2 Design e Programação. Padrões de projeto (GoF e Grasp). Concorrência, paralelismo, multithreading e programação assíncrona.' },
+                    { text: '3 APIs e Integrações. Design e versionamento de APIs RESTful. Boas práticas de autenticação/autorização (OAuth2, JWT, OpenID Connect).' },
+                    { text: '4 Persistência de Dados. Modelagem relacional e normalização. Bancos NoSQL (MongoDB e ElasticSearch). Versionamento e migração de esquemas.' },
+                    { text: '5 DevOps e Integração Contínua. Pipelines of CI/CD (GitHub Actions). Build, testes e deploy automatizados. Docker e orquestração com Kubernetes. Monitoramento e observabilidade: Grafana e New Relic.' },
+                    { text: '6 Testes e Qualidade de Código. Testes automatizados: unitários, integração, contrato (API). Análise estática de código e cobertura (SonarQube). ' },
+                    { text: '7 Linguagens de programação Java' },
+                    { text: '8 Desenvolvimento seguro. DevSecOps' }
                 ],
                 segurancaInformacao: [
                     { text: '1 Gestão de Identidades e Acesso. Autenticação e Autorização, Single Sign-On (SSO), Security Assertion Markup Language (SAML), OAuth2 e OpenId Connect' },
@@ -939,32 +983,38 @@
                     { text: '10 Segurança em nuvens e de contêineres' },
                     { text: '11 Ataques a redes de computadores. DoS, DDoS, botnets, phishing, zero-day exploits, ping da morte, UDP Flood, MAC flooding, IP spoofing, ARP spoofing, buffer overflow, SQL injection, Cross-Site Scripting (XSS), DNS Poisoning.' }
                 ],
-                engenhariaSoftware: [
-                    { text: '1 Arquitetura de Software. Padrões arquiteturais. Monolito. Microserviços, Serverless. Arquitetura orientada à eventos e mensageria. Padrões de integração (API Gateway, Service Mesh, CQRS). ' },
-                    { text: '2 Design e Programação. Padrões de projeto (GoF e Grasp). Concorrência, paralelismo, multithreading e programação assíncrona.' },
-                    { text: '3 APIs e Integrações. Design e versionamento de APIs RESTful. Boas práticas de autenticação/autorização (OAuth2, JWT, OpenID Connect).' },
-                    { text: '4 Persistência de Dados. Modelagem relacional e normalização. Bancos NoSQL (MongoDB e ElasticSearch). Versionamento e migração de esquemas.' },
-                    { text: '5 DevOps e Integração Contínua. Pipelines of CI/CD (GitHub Actions). Build, testes e deploy automatizados. Docker e orquestração com Kubernetes. Monitoramento e observabilidade: Grafana e New Relic.' },
-                    { text: '6 Testes e Qualidade de Código. Testes automatizados: unitários, integração, contrato (API). Análise estática de código e cobertura (SonarQube). ' },
-                    { text: '7 Linguagens de programação Java' },
-                    { text: '8 Desenvolvimento seguro. DevSecOps' }
+                computacaoNuvem: [
+                    { text: '1 Fundamentos de Computação em Nuvem. Modelos de serviço: IaaS, PaaS, SaaS. Modelos de implantação: nuvem pública, privada, híbrida. Arquitetura orientada a serviços (SOA) e microsserviços. Elasticidade, escalabilidade e alta disponibilidade' },
+                    { text: '2 Plataformas e Serviços de Nuvem: AWS, Microsoft Azure e Google Cloud Platform.' },
+                    { text: '3 Arquitetura de Soluções em Nuvem. Design de sistemas distribuídos resilientes. Arquiteturas serverless e event-driven. Balanceamento de carga e auto escalonamento. Containers e orquestração (Docker, Kubernetes)' },
+                    { text: '4 Redes e Segurança em Nuvem. VPNs, sub-redes, gateways e grupos de segurança. Gestão de identidade e acesso (IAM, RBAC, MFA). Criptografia em trânsito e em repouso (TLS, KMS). Zero Trust Architecture em ambientes de nuvem. VPNs site-to-site, Direct Connect, ExpressRoute' },
+                    { text: '5 DevOps, CI/CD e Infraestrutura como Código (IaC). Ferrramentas: Terraform. Pipelines de integração e entrega contínua (Jenkins, GitHub Actions). Observabilidade: monitoramento, logging, tracing (CloudWatch, Azure Monitor, GCloud Monitoring).' },
+                    { text: '6 Governança, Compliance e Custos. Gerenciamento de custos e otimização de recursos. Políticas de uso e governança em nuvem (tagueamento, cotas, limites). Conformidade com normas e padrões (ISO/IEC 27001, NIST 800-53, LGPD). FinOps' },
+                    { text: '7 Armazenamento e Processamento de Dados. Tipos de armazenamento: objetos, blocos, arquivos. Data Lakes e processamento distribuído. Integração com Big Data e A' },
+                    { text: '8 Migração e Modernização de Aplicações. Estratégias de migração. Ferramentas de migração (AWS Migration Hub, Azure Migrate, GCloud Migration Center).' },
+                    { text: '9 Multicloud. Arquiteturas multicloud e híbridas; Nuvem soberana e soberania de dados' },
+                    { text: '10 Normas sobre computação em nuvem no governo federal.' }
                 ],
-                engenhariaDados: [
-                    { text: '1 Bancos de Dados. Relacionais: Oracle e Microsoft SQL Server. Não relacionais (NoSQL): Elasticsearch e MongoDB. Modelagens de dados. Relacional, multidimensional, nosql. SQL (Procedural Language / Structured Query Language).' },
-                    { text: '2 Arquitetura de Inteligência de Negócio. DataWarehouse, DataMart, DataLake, DataMesh. ' },
-                    { text: '3 Conectores e integração com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
-                    { text: '4 Fluxo de manipulação de dados. ETL. Pepiline de dados: versionamento, logging e auditoria, tolerância a falhas, retries e checkpoints, Integração com CI/CD' },
-                    { text: '5 Governança e Qualidade de Dados. Linhagem e catalogação. Qualidade de dados: validação, conformidade, deduplicação. Metadados, glossários de dados, políticas de acesso.' },
-                    { text: '6 Integração com nuvem. Serviços gerenciados (Azure Data Factory, Azure Service Fabric, Azure Databricks). Armazenamento (S3, Azure Blob, GCS). Integração com serviços de IA e análise.' }
+                inteligenciaArtificial: [
+                    { text: '1 Aprendizado de Máquina: supervisionado, não supervisionado, semi-supervisionado, aprendizado por reforço, análise preditiva.' },
+                    { text: '2 Redes Neurais e Deep Learning. Arquiteturas de redes neurais, Frameworks, técnicas de treinamento e aplicações' },
+                    { text: '3 Processamento de linguagem natural. Modelos, pré-processamento, agentes inteligentes e sistemas multiagentes.' },
+                    { text: '4 Inteligência Artificial Generativa' },
+                    { text: '5 Arquitetura e engenharia de sistemas de IA. MLOps. Deploy de modelos. Integração com computação em nuvem' },
+                    { text: '6 Ética, Transparência e Responsabilidade em IA. Explicabilidade e interpretabilidade de modelos. Viés algorítmico e discriminação. LGPD e impactos regulatórios da IA. Princípios éticos para uso de IA.' }
                 ],
-                infraestruturaTI: [
-                    { text: '1 Arquitetura Infraestrutura de TI. Topologias físicas e lógicas de redes corporativas. Arquiteturas de data center (on-premises, cloud, híbrida). Infraestrutura hiperconvergente. Arquitetura escalável, tolerante a falhas e redundante' },
-                    { text: '2 Redes e Comunicação de Dados. Protocolos de comunicação de dados TCP, UDP, SCTP, ARP, TLS, SSL, OSPF, BGP, DNS, DHCP, ICMP, FTP, SFTP, SSH, HTTP, HTTPS, SMTP, IMAP, POP3. VLANs, STP, QoS, roteamento e switching em ambientes corporativos. SDN (Software Defined Networking) e redes programáveis. Wireless corporativo: Wi-Fi 6, WPA3, roaming, mesh.' },
-                    { text: '3 Sistemas Operacionais e Servidores. Administração avançada de Linux e Windows Server. Virtualização (KVM, VMware vSphere/ESXi. Serviços de diretório (Active Directory, LDAP). Gerenciamento de usuários, permissões, GPOs.' },
-                    { text: '4 Armazenamento e Backup. SAN, NAS, DAS: arquiteturas e protocolos (iSCSI, NFS, SMB). RAID (níveis, vantagens, hot-spare). Backup e recuperação: RPO, RTO, snapshots, deduplicação. Oracle RMAN' },
-                    { text: '5 Segurança de Infraestrutura. Hardening de servidores e dispositivos de rede. Firewalls (NGFW), IDS/IPS, proxies, NAC. VPNs, SSL/TLS, PKI, criptografia de dados. Segmentação de rede e zonas de segurança.' },
-                    { text: '6 Monitoramento, Gestão e Automação. Ferramentas: Zabbix, New Relic e Grafana. Gerência de capacidade, disponibilidade e desempenho. ITIL v4: incidentes, problemas, mudanças e configurações (CMDB). Scripts e automação com PowerShell, Bash e Puppet. ' },
-                    { text: '7 Alta Disponibilidade e Recuperação de Desastres. Clusters de alta disponibilidade e balanceamento de carga. Failover, heartbeat, fencing. Planos de continuidade de negócios e testes de DR' }
+                contratacaoTI: [
+                    { text: '1 Etapas da Contratação de Soluções de TI. Estudo técnico preliminar (ETP). Termo de Referência (TR) e Projeto Básico' },
+                    { text: '2 Tipos de Soluções e Modelos de Serviço. Contratação de software sob demanda, licenciamento, SaaS, IaaS, PaaS. Fábrica de software e sustentação de sistemas. Serviços de infraestrutura em nuvem e data center. Serviços gerenciados de TI e outsourcing' },
+                    { text: '3 Governança, Fiscalização e Gestão de Contratos. Papéis e responsabilidades: gestor, fiscal técnico, fiscal administrativo. Indicadores de nível de serviço (SLAs) e penalidades. Gestão de mudanças contratuais e reequilíbrio econômico-financeiro.' },
+                    { text: '4 Riscos e Controles em Contratações. Identificação, análise e resposta a riscos em contratos de TI. Controles internos aplicáveis às contratações públicas. Auditoria e responsabilização (jurídica e administrativa)' },
+                    { text: '5 Aspectos Técnicos e Estratégicos. Integração com o PDTIC e alinhamento com a estratégia institucional. Mapeamento e definição de requisitos técnicos e não funcionais. Sustentabilidade, acessibilidade e segurança da informação nos contratos' },
+                    { text: '6 Legislação e Normativos Aplicáveis. Lei nº 14.133/2021, Decreto nº 10.540/2020, Lei nº 13.709/2018 – LGPD (impactos em contratos de TI). Instruções Normativas da Administração Pública. IN SGD/ME nº 01/2019 – Planejamento das contratações de soluções de TI. IN SGD/ME nº 94/2022 – Governança, Gestão e Fiscalização de Contratos de TI. IN SGD/ME nº 65/2021 – Gestão de riscos em contratações de TI.' }
+                ],
+                gestaoTI: [
+                    { text: '1 Gerenciamento de serviços (ITIL v4): conceitos básicos, estrutura e objetivos' },
+                    { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos' },
+                    { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD' }
                 ]
             },
             'TCE_RJ': {
@@ -995,6 +1045,7 @@
         let studyCycleData = {
             currentDay: 1,
             selectedDisciplines: [],
+            disciplinesPerDay: 2,
             startDate: null,
             completedDays: {},
             currentRound: 1,
@@ -1140,9 +1191,9 @@
             
             // Atualiza progresso por categoria
             const categories = [
-                'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
-                'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
-                'engenhariaDados', 'infraestruturaTI'
+                'infraestruturaTI', 'engenhariaDados', 'engenhariaSoftware', 
+                'segurancaInformacao', 'computacaoNuvem', 'inteligenciaArtificial',
+                'contratacaoTI', 'gestaoTI'
             ];
             
             const currentOrg = document.getElementById('stateName').textContent;
@@ -1377,9 +1428,9 @@
             
             // Limpa links anteriores
             const categories = [
-                'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
-                'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
-                'engenhariaDados', 'infraestruturaTI'
+                'infraestruturaTI', 'engenhariaDados', 'engenhariaSoftware', 
+                'segurancaInformacao', 'computacaoNuvem', 'inteligenciaArtificial',
+                'contratacaoTI', 'gestaoTI'
             ];
             
             categories.forEach(category => {
@@ -1581,14 +1632,14 @@
         // Função auxiliar para obter o nome de exibição da categoria
         function getCategoryDisplayName(categoryKey) {
             const categoryMap = {
-                'gestaoTI': 'GESTÃO DE TI',
-                'contratacaoTI': 'CONTRATAÇÕES DE TI',
-                'inteligenciaArtificial': 'INTELIGÊNCIA ARTIFICIAL',
-                'computacaoNuvem': 'COMPUTAÇÃO EM NUVEM',
-                'segurancaInformacao': 'SEGURANÇA DA INFORMAÇÃO',
-                'engenhariaSoftware': 'ENGENHARIA DE SOFTWARE',
+                'infraestruturaTI': 'INFRAESTRUTURA DE TI',
                 'engenhariaDados': 'ENGENHARIA DE DADOS',
-                'infraestruturaTI': 'INFRAESTRUTURA DE TI'
+                'engenhariaSoftware': 'ENGENHARIA DE SOFTWARE',
+                'segurancaInformacao': 'SEGURANÇA DA INFORMAÇÃO',
+                'computacaoNuvem': 'COMPUTAÇÃO EM NUVEM',
+                'inteligenciaArtificial': 'INTELIGÊNCIA ARTIFICIAL',
+                'contratacaoTI': 'CONTRATAÇÕES DE TI',
+                'gestaoTI': 'GESTÃO DE TI'
             };
             
             return categoryMap[categoryKey] || categoryKey;
@@ -1641,6 +1692,7 @@
             }
             
             studyCycleData.selectedDisciplines = Array.from(selectedCheckboxes).map(cb => cb.value);
+            studyCycleData.disciplinesPerDay = parseInt(document.getElementById('disciplinesPerDay').value);
             studyCycleData.currentDay = 1;
             studyCycleData.startDate = new Date();
             studyCycleData.completedDays = {};
@@ -1657,18 +1709,45 @@
             document.getElementById('studyCycleContainer').scrollIntoView({ behavior: 'smooth' });
         });
 
+        // Função para obter as disciplinas do dia atual
+        function getCurrentDayDisciplines() {
+            if (studyCycleData.selectedDisciplines.length === 0) return [];
+            
+            const startIndex = (studyCycleData.currentDay - 1) * studyCycleData.disciplinesPerDay;
+            const endIndex = Math.min(startIndex + studyCycleData.disciplinesPerDay, studyCycleData.selectedDisciplines.length);
+            
+            let dayDisciplines = studyCycleData.selectedDisciplines.slice(startIndex, endIndex);
+            
+            // Se não há disciplinas suficientes para preencher o dia, pega do início
+            if (dayDisciplines.length < studyCycleData.disciplinesPerDay) {
+                const remaining = studyCycleData.disciplinesPerDay - dayDisciplines.length;
+                dayDisciplines = dayDisciplines.concat(studyCycleData.selectedDisciplines.slice(0, remaining));
+            }
+            
+            return dayDisciplines;
+        }
+
         // Atualizar display do ciclo redondo
         function updateRoundCycleDisplay() {
             if (studyCycleData.selectedDisciplines.length === 0) return;
             
-            const currentDisciplineKey = studyCycleData.selectedDisciplines[
-                (studyCycleData.currentDay - 1) % studyCycleData.selectedDisciplines.length
-            ];
-            const currentDisciplineName = getCategoryDisplayName(currentDisciplineKey);
+            const currentDayDisciplines = getCurrentDayDisciplines();
+            const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
             
-            document.getElementById('currentDisciplineName').textContent = currentDisciplineName;
+            // Atualiza o display das disciplinas
+            const disciplinesContainer = document.getElementById('currentDisciplinesNames');
+            disciplinesContainer.innerHTML = '';
+            
+            currentDayDisciplines.forEach(disciplineKey => {
+                const disciplineName = getCategoryDisplayName(disciplineKey);
+                const badge = document.createElement('span');
+                badge.className = 'discipline-badge';
+                badge.textContent = disciplineName;
+                disciplinesContainer.appendChild(badge);
+            });
+            
             document.getElementById('currentDayNumber').textContent = studyCycleData.currentDay;
-            document.getElementById('totalDays').textContent = studyCycleData.selectedDisciplines.length;
+            document.getElementById('totalDays').textContent = totalDays;
             
             // Calcula data do ciclo
             const cycleDate = new Date(studyCycleData.startDate);
@@ -1679,10 +1758,10 @@
             const completedDaysCount = Object.keys(studyCycleData.completedDays).length;
             document.getElementById('completedDays').textContent = completedDaysCount;
             document.getElementById('cycleRound').textContent = studyCycleData.currentRound;
-            document.getElementById('totalCompleted').textContent = completedDaysCount + (studyCycleData.currentRound - 1) * studyCycleData.selectedDisciplines.length;
+            document.getElementById('totalCompleted').textContent = completedDaysCount + (studyCycleData.currentRound - 1) * totalDays;
 
             // Atualiza progresso
-            const progressPercent = (completedDaysCount / studyCycleData.selectedDisciplines.length) * 100;
+            const progressPercent = (completedDaysCount / totalDays) * 100;
             document.getElementById('cycleProgressFill').style.width = `${progressPercent}%`;
             document.getElementById('cycleProgressText').textContent = `${Math.round(progressPercent)}%`;
 
@@ -1702,21 +1781,21 @@
         document.getElementById('markCompleteBtn').addEventListener('click', function() {
             if (studyCycleData.selectedDisciplines.length === 0) return;
             
-            const currentDisciplineKey = studyCycleData.selectedDisciplines[
-                (studyCycleData.currentDay - 1) % studyCycleData.selectedDisciplines.length
-            ];
+            const currentDayDisciplines = getCurrentDayDisciplines();
             
             // Marca o dia como concluído
             studyCycleData.completedDays[studyCycleData.currentDay] = {
                 date: new Date(),
-                discipline: currentDisciplineKey
+                disciplines: currentDayDisciplines
             };
 
             // Avança para o próximo dia
             studyCycleData.currentDay++;
 
+            const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
+            
             // Se completou todos os dias, reinicia o ciclo (nova rodada)
-            if (studyCycleData.currentDay > studyCycleData.selectedDisciplines.length) {
+            if (studyCycleData.currentDay > totalDays) {
                 studyCycleData.currentDay = 1;
                 studyCycleData.currentRound++;
                 studyCycleData.completedDays = {};
@@ -1744,12 +1823,13 @@
                 // Se está no dia 1, vai para o último dia da rodada anterior
                 if (studyCycleData.currentRound > 1) {
                     studyCycleData.currentRound--;
-                    studyCycleData.currentDay = studyCycleData.selectedDisciplines.length;
+                    const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
+                    studyCycleData.currentDay = totalDays;
                     // Recupera os dias concluídos da rodada anterior (simulação)
                     for (let i = 1; i < studyCycleData.currentDay; i++) {
                         studyCycleData.completedDays[i] = {
                             date: new Date(),
-                            discipline: studyCycleData.selectedDisciplines[i - 1]
+                            disciplines: getCurrentDayDisciplines()
                         };
                     }
                 }
