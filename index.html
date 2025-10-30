@@ -28,7 +28,7 @@
         
         .logo {
             color: white;
-            fontWeight: bold;
+            font-weight: bold;
             font-size: 1.5em;
             text-decoration: none;
         }
@@ -432,6 +432,174 @@
             z-index: 1000;
         }
         
+        /* Novos estilos para o ciclo de estudos */
+        .study-cycle-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .study-cycle-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #3498db;
+        }
+        
+        .study-cycle-title {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .study-cycle-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .cycle-btn {
+            padding: 8px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 0.9em;
+        }
+        
+        .cycle-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .cycle-btn.reset {
+            background-color: #e74c3c;
+        }
+        
+        .cycle-btn.reset:hover {
+            background-color: #c0392b;
+        }
+        
+        .study-cycle-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .cycle-day {
+            background-color: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 15px;
+            transition: all 0.3s;
+        }
+        
+        .cycle-day.current {
+            background-color: #e8f6ef;
+            border-color: #2ecc71;
+            box-shadow: 0 2px 5px rgba(46, 204, 113, 0.3);
+        }
+        
+        .cycle-day.completed {
+            background-color: #e8f6ef;
+            border-color: #2ecc71;
+        }
+        
+        .cycle-day.future {
+            background-color: #fef9e7;
+            border-color: #f39c12;
+        }
+        
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .day-title {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        
+        .day-status {
+            font-size: 0.8em;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background-color: #ecf0f1;
+            color: #7f8c8d;
+        }
+        
+        .day-status.current {
+            background-color: #3498db;
+            color: white;
+        }
+        
+        .day-status.completed {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .study-items {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .study-item {
+            padding: 5px 0;
+            border-bottom: 1px dashed #e0e0e0;
+            font-size: 0.9em;
+        }
+        
+        .study-item:last-child {
+            border-bottom: none;
+        }
+        
+        .study-item.completed {
+            color: #27ae60;
+            text-decoration: line-through;
+        }
+        
+        .study-item.current {
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .cycle-progress {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .cycle-progress-bar {
+            height: 8px;
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        
+        .cycle-progress-fill {
+            height: 100%;
+            background-color: #2ecc71;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        
+        .cycle-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8em;
+            color: #7f8c8d;
+        }
+        
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -498,6 +666,21 @@
             .sync-btn {
                 bottom: 50px;
             }
+            
+            .study-cycle-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .study-cycle-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .study-cycle-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
@@ -509,6 +692,7 @@
             <li><a href="#">Início</a></li>
             <li><a href="#progresso">Meu Progresso</a></li>
             <li><a href="#disciplinas">Disciplinas</a></li>
+            <li><a href="#ciclo">Ciclo de Estudos</a></li>
         </ul>
     </div>
     
@@ -548,6 +732,30 @@
             </div>
         </div>
         
+        <!-- Ciclo de Estudos -->
+        <div class="study-cycle-container" id="studyCycleContainer" style="display: none;">
+            <div class="study-cycle-header">
+                <h3 class="study-cycle-title">Ciclo de Estudos - <span id="currentDisciplineName">Disciplina</span></h3>
+                <div class="study-cycle-controls">
+                    <button class="cycle-btn" id="prevDayBtn">← Dia Anterior</button>
+                    <button class="cycle-btn" id="nextDayBtn">Próximo Dia →</button>
+                    <button class="cycle-btn reset" id="resetCycleBtn">Reiniciar Ciclo</button>
+                </div>
+            </div>
+            <div class="study-cycle-content" id="studyCycleContent">
+                <!-- Os dias do ciclo serão gerados dinamicamente aqui -->
+            </div>
+            <div class="cycle-progress">
+                <div class="cycle-stats">
+                    <span id="cycleProgressText">Progresso do Ciclo: 0%</span>
+                    <span id="cycleDayInfo">Dia 1 de 7</span>
+                </div>
+                <div class="cycle-progress-bar">
+                    <div class="cycle-progress-fill" id="cycleProgressFill" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+        
         <div class="states-container">
             <button class="state-btn" data-state="TCU">TCU</button>
             <button class="state-btn" data-state="TCE_RJ">TCE RJ</button>
@@ -560,6 +768,7 @@
                 <button class="filter-btn active" data-filter="all">Todos</button>
                 <button class="filter-btn" data-filter="pending">Pendentes</button>
                 <button class="filter-btn" data-filter="completed">Concluídos</button>
+                <button class="filter-btn" id="startCycleBtn" style="background-color: #9b59b6;">Iniciar Ciclo</button>
             </div>
             
             <div class="state-categories">
@@ -616,7 +825,6 @@
 
     <script>
         // Configuração do Google Apps Script
-        // SUBSTITUA ESTE URL PELO SEU URL DO GOOGLE APPS SCRIPT
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxMYxUEqiFbclyT1in7J6Ts87U0o2PjgZW6SN1Yw7xFO0jgS07l89xbrguYTt_frMW-/exec';
         
         // Data de atualização
@@ -627,7 +835,7 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
         
-        // Dados atualizados com disciplinas de TI
+        // Dados atualizados com disciplinas de TI (mantido igual)
         const stateLinks = {
             'TCU': {
                 gestaoTI: [
@@ -727,6 +935,15 @@
         let linkData = {};
         let isOnline = false;
         let currentState = null;
+        
+        // Sistema de ciclo de estudos
+        let studyCycleData = {
+            currentDiscipline: null,
+            currentDay: 1,
+            totalDays: 7,
+            days: {},
+            disciplineProgress: {}
+        };
 
         // Função para fazer requisições para o Google Apps Script
         async function makeRequest(action, data = {}) {
@@ -757,10 +974,15 @@
         // Fallback para localStorage
         function loadFromLocalStorage(action) {
             if (action === 'getProgress') {
+                const storedProgress = JSON.parse(localStorage.getItem('progressData')) || {};
+                const storedLinkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                const storedStudyCycle = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
+                
                 return {
                     success: true,
-                    progressData: JSON.parse(localStorage.getItem('progressData')) || {},
-                    linkData: JSON.parse(localStorage.getItem('linkData')) || {}
+                    progressData: storedProgress,
+                    linkData: storedLinkData,
+                    studyCycleData: storedStudyCycle
                 };
             }
             return { success: false };
@@ -783,12 +1005,14 @@
             // Salva localmente como fallback
             localStorage.setItem('progressData', JSON.stringify(progressData));
             localStorage.setItem('linkData', JSON.stringify(linkData));
+            localStorage.setItem('studyCycleData', JSON.stringify(studyCycleData));
             
             // Tenta salvar no servidor
             try {
                 const result = await makeRequest('saveProgress', {
                     progressData: progressData,
-                    linkData: linkData
+                    linkData: linkData,
+                    studyCycleData: studyCycleData
                 });
                 
                 if (result.success) {
@@ -801,6 +1025,7 @@
             }
             
             updateProgressDisplay();
+            updateStudyCycleDisplay();
         }
 
         // Função para carregar progresso
@@ -811,18 +1036,22 @@
                 if (result.success) {
                     progressData = result.progressData || {};
                     linkData = result.linkData || {};
+                    studyCycleData = result.studyCycleData || studyCycleData;
                 } else {
                     // Fallback para localStorage
                     progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                     linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                    studyCycleData = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
                 }
             } catch (error) {
                 console.warn('Erro ao carregar do servidor, usando localStorage');
                 progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                 linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                studyCycleData = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
             }
             
             updateProgressDisplay();
+            updateStudyCycleDisplay();
         }
 
         // Função para atualizar o display de progresso
@@ -879,6 +1108,7 @@
             itemDiv.className = `content-item ${isCompleted ? 'completed' : ''}`;
             itemDiv.dataset.itemId = itemId;
             itemDiv.dataset.text = text.toLowerCase();
+            itemDiv.dataset.category = category;
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -893,6 +1123,11 @@
                 
                 // Atualiza visual
                 itemDiv.classList.toggle('completed', this.checked);
+                
+                // Atualiza ciclo de estudos se estiver ativo
+                if (studyCycleData.currentDiscipline === category) {
+                    updateStudyCycleProgress();
+                }
                 
                 saveProgress();
             });
@@ -1323,11 +1558,249 @@
             alert('Dados sincronizados!');
         });
         
+        // ========== SISTEMA DE CICLO DE ESTUDOS ==========
+        
+        // Iniciar ciclo de estudos
+        document.getElementById('startCycleBtn').addEventListener('click', function() {
+            const currentOrg = document.getElementById('stateName').textContent;
+            if (!currentOrg || currentOrg === 'Órgão') {
+                alert('Selecione um órgão primeiro!');
+                return;
+            }
+            
+            // Encontra a disciplina com menor progresso
+            const categories = [
+                'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
+                'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
+                'engenhariaDados', 'infraestruturaTI'
+            ];
+            
+            let minProgress = 100;
+            let selectedDiscipline = null;
+            
+            categories.forEach(category => {
+                const categoryData = progressData[currentOrg] && progressData[currentOrg][category] ? progressData[currentOrg][category] : {};
+                const totalItems = Object.keys(categoryData).length;
+                const completedItems = Object.values(categoryData).filter(val => val).length;
+                const progress = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+                
+                if (progress < minProgress && totalItems > 0) {
+                    minProgress = progress;
+                    selectedDiscipline = category;
+                }
+            });
+            
+            if (!selectedDiscipline) {
+                alert('Nenhuma disciplina com conteúdo disponível encontrada!');
+                return;
+            }
+            
+            startStudyCycle(selectedDiscipline, currentOrg);
+        });
+        
+        // Função para iniciar ciclo de estudos
+        function startStudyCycle(discipline, org) {
+            studyCycleData.currentDiscipline = discipline;
+            studyCycleData.currentDay = 1;
+            studyCycleData.totalDays = 7;
+            
+            // Inicializa dados do ciclo se não existirem
+            if (!studyCycleData.days[discipline]) {
+                studyCycleData.days[discipline] = {};
+                for (let day = 1; day <= studyCycleData.totalDays; day++) {
+                    studyCycleData.days[discipline][day] = {
+                        completed: false,
+                        items: {}
+                    };
+                }
+            }
+            
+            // Distribui os itens da disciplina pelos dias
+            const disciplineItems = stateLinks[currentState][discipline] || [];
+            const itemsPerDay = Math.ceil(disciplineItems.length / studyCycleData.totalDays);
+            
+            for (let day = 1; day <= studyCycleData.totalDays; day++) {
+                const startIndex = (day - 1) * itemsPerDay;
+                const endIndex = Math.min(startIndex + itemsPerDay, disciplineItems.length);
+                const dayItems = disciplineItems.slice(startIndex, endIndex);
+                
+                studyCycleData.days[discipline][day].plannedItems = dayItems.map((item, index) => ({
+                    text: item.text,
+                    itemId: `${org}-${discipline}-${startIndex + index}`
+                }));
+            }
+            
+            document.getElementById('currentDisciplineName').textContent = getCategoryDisplayName(discipline);
+            document.getElementById('studyCycleContainer').style.display = 'block';
+            
+            updateStudyCycleDisplay();
+            saveProgress();
+            
+            // Rola até o ciclo de estudos
+            document.getElementById('studyCycleContainer').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Atualizar display do ciclo de estudos
+        function updateStudyCycleDisplay() {
+            const cycleContent = document.getElementById('studyCycleContent');
+            cycleContent.innerHTML = '';
+            
+            const discipline = studyCycleData.currentDiscipline;
+            if (!discipline) return;
+            
+            for (let day = 1; day <= studyCycleData.totalDays; day++) {
+                const dayData = studyCycleData.days[discipline][day] || { completed: false, items: {}, plannedItems: [] };
+                const dayElement = document.createElement('div');
+                dayElement.className = 'cycle-day';
+                
+                if (day === studyCycleData.currentDay) {
+                    dayElement.classList.add('current');
+                } else if (day < studyCycleData.currentDay) {
+                    dayElement.classList.add('completed');
+                } else {
+                    dayElement.classList.add('future');
+                }
+                
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'day-header';
+                
+                const dayTitle = document.createElement('div');
+                dayTitle.className = 'day-title';
+                dayTitle.textContent = `Dia ${day}`;
+                
+                const dayStatus = document.createElement('div');
+                dayStatus.className = 'day-status';
+                
+                if (day === studyCycleData.currentDay) {
+                    dayStatus.textContent = 'HOJE';
+                    dayStatus.classList.add('current');
+                } else if (day < studyCycleData.currentDay) {
+                    dayStatus.textContent = 'CONCLUÍDO';
+                    dayStatus.classList.add('completed');
+                } else {
+                    dayStatus.textContent = 'FUTURO';
+                }
+                
+                dayHeader.appendChild(dayTitle);
+                dayHeader.appendChild(dayStatus);
+                dayElement.appendChild(dayHeader);
+                
+                const studyItems = document.createElement('ul');
+                studyItems.className = 'study-items';
+                
+                if (dayData.plannedItems) {
+                    dayData.plannedItems.forEach(plannedItem => {
+                        const itemElement = document.createElement('li');
+                        itemElement.className = 'study-item';
+                        
+                        const isCompleted = progressData[document.getElementById('stateName').textContent] && 
+                                          progressData[document.getElementById('stateName').textContent][discipline] && 
+                                          progressData[document.getElementById('stateName').textContent][discipline][plannedItem.itemId];
+                        
+                        if (isCompleted) {
+                            itemElement.classList.add('completed');
+                        }
+                        
+                        if (day === studyCycleData.currentDay && !isCompleted) {
+                            itemElement.classList.add('current');
+                        }
+                        
+                        itemElement.textContent = plannedItem.text;
+                        studyItems.appendChild(itemElement);
+                    });
+                }
+                
+                dayElement.appendChild(studyItems);
+                cycleContent.appendChild(dayElement);
+            }
+            
+            updateStudyCycleProgress();
+        }
+        
+        // Atualizar progresso do ciclo
+        function updateStudyCycleProgress() {
+            const discipline = studyCycleData.currentDiscipline;
+            if (!discipline) return;
+            
+            let totalItems = 0;
+            let completedItems = 0;
+            
+            for (let day = 1; day <= studyCycleData.totalDays; day++) {
+                const dayData = studyCycleData.days[discipline][day];
+                if (dayData && dayData.plannedItems) {
+                    dayData.plannedItems.forEach(plannedItem => {
+                        totalItems++;
+                        const isCompleted = progressData[document.getElementById('stateName').textContent] && 
+                                          progressData[document.getElementById('stateName').textContent][discipline] && 
+                                          progressData[document.getElementById('stateName').textContent][discipline][plannedItem.itemId];
+                        if (isCompleted) {
+                            completedItems++;
+                        }
+                    });
+                }
+            }
+            
+            const progressPercent = totalItems > 0 ? (completedItems / totalItems) * 100 : 0;
+            document.getElementById('cycleProgressFill').style.width = `${progressPercent}%`;
+            document.getElementById('cycleProgressText').textContent = `Progresso do Ciclo: ${Math.round(progressPercent)}%`;
+            document.getElementById('cycleDayInfo').textContent = `Dia ${studyCycleData.currentDay} de ${studyCycleData.totalDays}`;
+            
+            // Avança automaticamente para o próximo dia se todos os itens do dia atual foram concluídos
+            if (studyCycleData.currentDay <= studyCycleData.totalDays) {
+                const currentDayData = studyCycleData.days[discipline][studyCycleData.currentDay];
+                if (currentDayData && currentDayData.plannedItems) {
+                    const allCurrentDayCompleted = currentDayData.plannedItems.every(plannedItem => {
+                        return progressData[document.getElementById('stateName').textContent] && 
+                               progressData[document.getElementById('stateName').textContent][discipline] && 
+                               progressData[document.getElementById('stateName').textContent][discipline][plannedItem.itemId];
+                    });
+                    
+                    if (allCurrentDayCompleted && studyCycleData.currentDay < studyCycleData.totalDays) {
+                        studyCycleData.currentDay++;
+                        updateStudyCycleDisplay();
+                        saveProgress();
+                    }
+                }
+            }
+        }
+        
+        // Navegação do ciclo
+        document.getElementById('prevDayBtn').addEventListener('click', function() {
+            if (studyCycleData.currentDay > 1) {
+                studyCycleData.currentDay--;
+                updateStudyCycleDisplay();
+                saveProgress();
+            }
+        });
+        
+        document.getElementById('nextDayBtn').addEventListener('click', function() {
+            if (studyCycleData.currentDay < studyCycleData.totalDays) {
+                studyCycleData.currentDay++;
+                updateStudyCycleDisplay();
+                saveProgress();
+            }
+        });
+        
+        document.getElementById('resetCycleBtn').addEventListener('click', function() {
+            if (confirm('Tem certeza que deseja reiniciar o ciclo de estudos?')) {
+                studyCycleData.currentDay = 1;
+                updateStudyCycleDisplay();
+                saveProgress();
+            }
+        });
+        
         // Carrega os dados quando a página inicia
         document.addEventListener('DOMContentLoaded', async function() {
             await loadProgress();
             updateProgressDisplay();
             updateSyncStatus();
+            
+            // Mostra o ciclo de estudos se houver um ativo
+            if (studyCycleData.currentDiscipline) {
+                document.getElementById('studyCycleContainer').style.display = 'block';
+                document.getElementById('currentDisciplineName').textContent = getCategoryDisplayName(studyCycleData.currentDiscipline);
+                updateStudyCycleDisplay();
+            }
         });
     </script>
 </body>
