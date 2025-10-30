@@ -28,7 +28,7 @@
         
         .logo {
             color: white;
-            font-weight: bold;
+            fontWeight: bold;
             font-size: 1.5em;
             text-decoration: none;
         }
@@ -360,6 +360,20 @@
             font-size: 1em;
         }
         
+        .search-filters {
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
         .controls {
             display: flex;
             justify-content: space-between;
@@ -513,7 +527,25 @@
 
     <div class="container">
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Pesquisar órgãos ou disciplinas...">
+            <input type="text" class="search-input" placeholder="Pesquisar órgãos, disciplinas ou conteúdos...">
+            <div class="search-filters">
+                <div class="filter-option">
+                    <input type="radio" id="filter-all" name="search-filter" value="all" checked>
+                    <label for="filter-all">Todos</label>
+                </div>
+                <div class="filter-option">
+                    <input type="radio" id="filter-orgao" name="search-filter" value="orgao">
+                    <label for="filter-orgao">Órgãos</label>
+                </div>
+                <div class="filter-option">
+                    <input type="radio" id="filter-disciplina" name="search-filter" value="disciplina">
+                    <label for="filter-disciplina">Disciplinas</label>
+                </div>
+                <div class="filter-option">
+                    <input type="radio" id="filter-conteudo" name="search-filter" value="conteudo">
+                    <label for="filter-conteudo">Conteúdos</label>
+                </div>
+            </div>
         </div>
         
         <div class="states-container">
@@ -531,42 +563,42 @@
             </div>
             
             <div class="state-categories">
-                <div class="category">
+                <div class="category" data-disciplina="GESTÃO DE TI">
                     <h3>GESTÃO DE TI <span class="category-progress" id="gestaoTIProgress">0/0</span></h3>
                     <div class="links" id="gestaoTILinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="CONTRATAÇÕES DE TI">
                     <h3>CONTRATAÇÕES DE TI <span class="category-progress" id="contratacaoTIProgress">0/0</span></h3>
                     <div class="links" id="contratacaoTILinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="INTELIGÊNCIA ARTIFICIAL">
                     <h3>INTELIGÊNCIA ARTIFICIAL <span class="category-progress" id="inteligenciaArtificialProgress">0/0</span></h3>
                     <div class="links" id="inteligenciaArtificialLinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="COMPUTAÇÃO EM NUVEM">
                     <h3>COMPUTAÇÃO EM NUVEM <span class="category-progress" id="computacaoNuvemProgress">0/0</span></h3>
                     <div class="links" id="computacaoNuvemLinks"></div>
                 </div>
 
-                <div class="category">
+                <div class="category" data-disciplina="SEGURANÇA DA INFORMAÇÃO">
                     <h3>SEGURANÇA DA INFORMAÇÃO <span class="category-progress" id="segurancaInformacaoProgress">0/0</span></h3>
                     <div class="links" id="segurancaInformacaoLinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="ENGENHARIA DE SOFTWARE">
                     <h3>ENGENHARIA DE SOFTWARE <span class="category-progress" id="engenhariaSoftwareProgress">0/0</span></h3>
                     <div class="links" id="engenhariaSoftwareLinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="ENGENHARIA DE DADOS">
                     <h3>ENGENHARIA DE DADOS <span class="category-progress" id="engenhariaDadosProgress">0/0</span></h3>
                     <div class="links" id="engenhariaDadosLinks"></div>
                 </div>
                 
-                <div class="category">
+                <div class="category" data-disciplina="INFRAESTRUTURA DE TI">
                     <h3>INFRAESTRUTURA DE TI <span class="category-progress" id="infraestruturaTIProgress">0/0</span></h3>
                     <div class="links" id="infraestruturaTILinks"></div>
                 </div>
@@ -694,43 +726,8 @@
         let progressData = {};
         let linkData = {};
         let isOnline = false;
-        
-// Adicione esta função no seu script HTML
-async function testConnection() {
-    try {
-        console.log('Testando conexão com Google Apps Script...');
-        const response = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'getProgress'
-            })
-        });
-        
-        const result = await response.json();
-        console.log('Resposta do servidor:', result);
-        return result;
-    } catch (error) {
-        console.error('Erro na conexão:', error);
-        return { success: false, error: error.message };
-    }
-}
+        let currentState = null;
 
-// Chame esta função no carregamento da página
-document.addEventListener('DOMContentLoaded', async function() {
-    console.log('Iniciando aplicação...');
-    console.log('URL do Script:', SCRIPT_URL);
-    
-    // Testa a conexão
-    await testConnection();
-    
-    // Carrega os dados normalmente
-    await loadProgress();
-    updateProgressDisplay();
-    updateSyncStatus();
-});
         // Função para fazer requisições para o Google Apps Script
         async function makeRequest(action, data = {}) {
             try {
@@ -881,6 +878,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             const itemDiv = document.createElement('div');
             itemDiv.className = `content-item ${isCompleted ? 'completed' : ''}`;
             itemDiv.dataset.itemId = itemId;
+            itemDiv.dataset.text = text.toLowerCase();
             
             const checkbox = document.createElement('input');
             checkbox.type = 'checkbox';
@@ -1072,85 +1070,250 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
         }
         
-        // Adiciona eventos de clique para cada botão de órgão
-        document.querySelectorAll('.state-btn').forEach(btn => {
-            btn.addEventListener('click', async function() {
-                const stateId = this.getAttribute('data-state');
-                const stateName = this.textContent;
+        // Função para carregar conteúdo de um órgão
+        function loadStateContent(stateId, stateName) {
+            currentState = stateId;
+            
+            // Carrega os dados mais recentes
+            loadProgress();
+            
+            // Atualiza o nome do órgão
+            document.getElementById('stateName').textContent = stateName;
+            
+            // Mostra as seções de disciplinas
+            document.querySelector('.state-categories').style.display = 'grid';
+            
+            // Limpa links anteriores
+            const categories = [
+                'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
+                'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
+                'engenhariaDados', 'infraestruturaTI'
+            ];
+            
+            categories.forEach(category => {
+                const element = document.getElementById(category + 'Links');
+                if (element) {
+                    element.innerHTML = '';
+                }
+            });
+            
+            // Verifica se há dados para este órgão
+            if (stateLinks[stateId]) {
+                const links = stateLinks[stateId];
                 
-                // Carrega os dados mais recentes
-                await loadProgress();
-                
-                // Atualiza o nome do órgão
-                document.getElementById('stateName').textContent = stateName;
-                
-                // Mostra as seções de disciplinas
-                document.querySelector('.state-categories').style.display = 'grid';
-                
-                // Limpa links anteriores
-                const categories = [
-                    'gestaoTI', 'contratacaoTI', 'inteligenciaArtificial', 
-                    'computacaoNuvem', 'segurancaInformacao', 'engenhariaSoftware',
-                    'engenhariaDados', 'infraestruturaTI'
-                ];
-                
+                // Adiciona conteúdo para cada categoria
+                categories.forEach(category => {
+                    const elementId = category + 'Links';
+                    const element = document.getElementById(elementId);
+                    
+                    if (element && links[category] && links[category].length > 0) {
+                        links[category].forEach((item, index) => {
+                            const contentItem = createContentItem(item.text, stateName, category, index);
+                            element.appendChild(contentItem);
+                        });
+                    } else if (element) {
+                        element.innerHTML = '<p>Nenhum conteúdo disponível no momento</p>';
+                    }
+                });
+            } else {
+                // Se não houver dados para o órgão
                 categories.forEach(category => {
                     const element = document.getElementById(category + 'Links');
                     if (element) {
-                        element.innerHTML = '';
+                        element.innerHTML = '<p>Dados não disponíveis para este órgão</p>';
                     }
                 });
-                
-                // Verifica se há dados para este órgão
-                if (stateLinks[stateId]) {
-                    const links = stateLinks[stateId];
-                    
-                    // Adiciona conteúdo para cada categoria
-                    categories.forEach(category => {
-                        const elementId = category + 'Links';
-                        const element = document.getElementById(elementId);
-                        
-                        if (element && links[category] && links[category].length > 0) {
-                            links[category].forEach((item, index) => {
-                                const contentItem = createContentItem(item.text, stateName, category, index);
-                                element.appendChild(contentItem);
-                            });
-                        } else if (element) {
-                            element.innerHTML = '<p>Nenhum conteúdo disponível no momento</p>';
-                        }
-                    });
-                } else {
-                    // Se não houver dados para o órgão
-                    categories.forEach(category => {
-                        const element = document.getElementById(category + 'Links');
-                        if (element) {
-                            element.innerHTML = '<p>Dados não disponíveis para este órgão</p>';
-                        }
-                    });
-                }
-                
-                // Mostra a seção de informações
-                document.getElementById('stateInfo').style.display = 'block';
-                
-                // Atualiza display de progresso
-                updateProgressDisplay();
-                
-                // Rola a página até a seção de informações
-                document.getElementById('stateInfo').scrollIntoView({ behavior: 'smooth' });
+            }
+            
+            // Mostra a seção de informações
+            document.getElementById('stateInfo').style.display = 'block';
+            
+            // Atualiza display de progresso
+            updateProgressDisplay();
+            
+            // Rola a página até a seção de informações
+            document.getElementById('stateInfo').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Adiciona eventos de clique para cada botão de órgão
+        document.querySelectorAll('.state-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const stateId = this.getAttribute('data-state');
+                const stateName = this.textContent;
+                loadStateContent(stateId, stateName);
             });
         });
         
-        // Função de pesquisa
-        document.querySelector('.search-input').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
+        // Função de pesquisa aprimorada
+        function performSearch(searchTerm, filterType) {
+            searchTerm = searchTerm.toLowerCase().trim();
             
-            document.querySelectorAll('.state-btn').forEach(btn => {
-                const stateName = btn.textContent.toLowerCase();
-                if (stateName.includes(searchTerm)) {
+            if (!searchTerm) {
+                // Se não há termo de pesquisa, mostra todos os órgãos
+                document.querySelectorAll('.state-btn').forEach(btn => {
                     btn.style.display = 'block';
-                } else {
-                    btn.style.display = 'none';
+                });
+                
+                // Se já tem um órgão selecionado, mantém as disciplinas visíveis
+                if (currentState) {
+                    document.querySelectorAll('.category').forEach(category => {
+                        category.style.display = 'block';
+                    });
+                    document.querySelectorAll('.content-item').forEach(item => {
+                        item.style.display = 'flex';
+                    });
                 }
+                return;
+            }
+            
+            switch(filterType) {
+                case 'orgao':
+                    // Filtra apenas órgãos
+                    document.querySelectorAll('.state-btn').forEach(btn => {
+                        const stateName = btn.textContent.toLowerCase();
+                        if (stateName.includes(searchTerm)) {
+                            btn.style.display = 'block';
+                        } else {
+                            btn.style.display = 'none';
+                        }
+                    });
+                    break;
+                    
+                case 'disciplina':
+                    // Filtra disciplinas dentro do órgão atual
+                    if (currentState) {
+                        document.querySelectorAll('.category').forEach(category => {
+                            const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
+                            if (disciplinaName.includes(searchTerm)) {
+                                category.style.display = 'block';
+                            } else {
+                                category.style.display = 'none';
+                            }
+                        });
+                    } else {
+                        // Se não há órgão selecionado, pesquisa em todos os órgãos
+                        let found = false;
+                        document.querySelectorAll('.state-btn').forEach(btn => {
+                            const stateId = btn.getAttribute('data-state');
+                            if (stateLinks[stateId]) {
+                                for (const category in stateLinks[stateId]) {
+                                    const categoryName = getCategoryDisplayName(category).toLowerCase();
+                                    if (categoryName.includes(searchTerm)) {
+                                        btn.style.display = 'block';
+                                        found = true;
+                                        break;
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'conteudo':
+                    // Filtra conteúdos específicos
+                    if (currentState) {
+                        document.querySelectorAll('.content-item').forEach(item => {
+                            const itemText = item.dataset.text;
+                            if (itemText.includes(searchTerm)) {
+                                item.style.display = 'flex';
+                            } else {
+                                item.style.display = 'none';
+                            }
+                        });
+                    }
+                    break;
+                    
+                case 'all':
+                default:
+                    // Pesquisa em tudo
+                    let foundInOrgao = false;
+                    
+                    // Primeiro pesquisa nos órgãos
+                    document.querySelectorAll('.state-btn').forEach(btn => {
+                        const stateName = btn.textContent.toLowerCase();
+                        const stateId = btn.getAttribute('data-state');
+                        
+                        if (stateName.includes(searchTerm)) {
+                            btn.style.display = 'block';
+                            foundInOrgao = true;
+                        } else if (stateLinks[stateId]) {
+                            // Pesquisa nas disciplinas do órgão
+                            let foundInDisciplina = false;
+                            for (const category in stateLinks[stateId]) {
+                                const categoryName = getCategoryDisplayName(category).toLowerCase();
+                                if (categoryName.includes(searchTerm)) {
+                                    btn.style.display = 'block';
+                                    foundInOrgao = true;
+                                    foundInDisciplina = true;
+                                    break;
+                                }
+                            }
+                            
+                            if (!foundInDisciplina) {
+                                btn.style.display = 'none';
+                            }
+                        } else {
+                            btn.style.display = 'none';
+                        }
+                    });
+                    
+                    // Se há um órgão selecionado, pesquisa também nos conteúdos
+                    if (currentState) {
+                        document.querySelectorAll('.category').forEach(category => {
+                            const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
+                            if (disciplinaName.includes(searchTerm)) {
+                                category.style.display = 'block';
+                            } else {
+                                // Verifica se há conteúdos que correspondem
+                                const items = category.querySelectorAll('.content-item');
+                                let hasMatchingItems = false;
+                                
+                                items.forEach(item => {
+                                    const itemText = item.dataset.text;
+                                    if (itemText.includes(searchTerm)) {
+                                        item.style.display = 'flex';
+                                        hasMatchingItems = true;
+                                    } else {
+                                        item.style.display = 'none';
+                                    }
+                                });
+                                
+                                category.style.display = hasMatchingItems ? 'block' : 'none';
+                            }
+                        });
+                    }
+                    break;
+            }
+        }
+        
+        // Função auxiliar para obter o nome de exibição da categoria
+        function getCategoryDisplayName(categoryKey) {
+            const categoryMap = {
+                'gestaoTI': 'GESTÃO DE TI',
+                'contratacaoTI': 'CONTRATAÇÕES DE TI',
+                'inteligenciaArtificial': 'INTELIGÊNCIA ARTIFICIAL',
+                'computacaoNuvem': 'COMPUTAÇÃO EM NUVEM',
+                'segurancaInformacao': 'SEGURANÇA DA INFORMAÇÃO',
+                'engenhariaSoftware': 'ENGENHARIA DE SOFTWARE',
+                'engenhariaDados': 'ENGENHARIA DE DADOS',
+                'infraestruturaTI': 'INFRAESTRUTURA DE TI'
+            };
+            
+            return categoryMap[categoryKey] || categoryKey;
+        }
+        
+        // Event listener para a pesquisa
+        document.querySelector('.search-input').addEventListener('input', function(e) {
+            const searchTerm = e.target.value;
+            const filterType = document.querySelector('input[name="search-filter"]:checked').value;
+            performSearch(searchTerm, filterType);
+        });
+        
+        // Event listener para os filtros de pesquisa
+        document.querySelectorAll('input[name="search-filter"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                const searchTerm = document.querySelector('.search-input').value;
+                performSearch(searchTerm, this.value);
             });
         });
 
