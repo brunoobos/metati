@@ -1,3 +1,10 @@
+# Implementação de Botões Grandes para Disciplinas
+
+Vou modificar o sistema de busca para incluir uma caixa de seleção (dropdown) e criar botões grandes para cada disciplina, facilitando a navegação.
+
+Aqui está o código atualizado:
+
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -628,6 +635,91 @@
             max-width: 200px;
         }
         
+        /* NOVOS ESTILOS PARA OS BOTÕES DE DISCIPLINAS */
+        .disciplines-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+            padding: 0 20px;
+        }
+        
+        .discipline-btn {
+            padding: 25px 15px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-size: 1.1em;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+        
+        .discipline-btn:hover {
+            background-color: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .discipline-btn .progress {
+            margin-top: 10px;
+            font-size: 0.8em;
+            opacity: 0.8;
+        }
+        
+        /* Estilos para o dropdown de disciplinas */
+        .discipline-dropdown {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .discipline-dropdown select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            font-size: 1em;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23333' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            padding-right: 40px;
+        }
+        
+        .discipline-dropdown select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .discipline-section {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .discipline-section h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-top: 0;
+        }
+        
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -717,6 +809,15 @@
             .current-disciplines {
                 font-size: 1.2em;
             }
+            
+            .disciplines-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .discipline-btn {
+                min-height: 100px;
+                font-size: 1em;
+            }
         }
     </style>
 </head>
@@ -766,6 +867,57 @@
                     <label for="filter-conteudo">Conteúdos</label>
                 </div>
             </div>
+            
+            <!-- Dropdown para seleção de disciplinas -->
+            <div class="discipline-dropdown">
+                <select id="disciplineSelect">
+                    <option value="">Selecione uma disciplina...</option>
+                    <option value="infraestruturaTI">INFRAESTRUTURA DE TI</option>
+                    <option value="engenhariaDados">ENGENHARIA DE DADOS</option>
+                    <option value="engenhariaSoftware">ENGENHARIA DE SOFTWARE</option>
+                    <option value="segurancaInformacao">SEGURANÇA DA INFORMAÇÃO</option>
+                    <option value="computacaoNuvem">COMPUTAÇÃO EM NUVEM</option>
+                    <option value="inteligenciaArtificial">INTELIGÊNCIA ARTIFICIAL</option>
+                    <option value="contratacaoTI">CONTRATAÇÕES DE TI</option>
+                    <option value="gestaoTI">GESTÃO DE TI</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Botões grandes para disciplinas -->
+        <div class="disciplines-container" id="disciplinesContainer">
+            <button class="discipline-btn" data-disciplina="infraestruturaTI">
+                INFRAESTRUTURA DE TI
+                <div class="progress" id="infraestruturaTIProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="engenhariaDados">
+                ENGENHARIA DE DADOS
+                <div class="progress" id="engenhariaDadosProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="engenhariaSoftware">
+                ENGENHARIA DE SOFTWARE
+                <div class="progress" id="engenhariaSoftwareProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="segurancaInformacao">
+                SEGURANÇA DA INFORMAÇÃO
+                <div class="progress" id="segurancaInformacaoProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="computacaoNuvem">
+                COMPUTAÇÃO EM NUVEM
+                <div class="progress" id="computacaoNuvemProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="inteligenciaArtificial">
+                INTELIGÊNCIA ARTIFICIAL
+                <div class="progress" id="inteligenciaArtificialProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="contratacaoTI">
+                CONTRATAÇÕES DE TI
+                <div class="progress" id="contratacaoTIProgressBtn">0/0</div>
+            </button>
+            <button class="discipline-btn" data-disciplina="gestaoTI">
+                GESTÃO DE TI
+                <div class="progress" id="gestaoTIProgressBtn">0/0</div>
+            </button>
         </div>
         
         <!-- Ciclo de Estudos Redondo -->
@@ -1206,6 +1358,12 @@
                     const progressElement = document.getElementById(`${category}Progress`);
                     if (progressElement) {
                         progressElement.textContent = `${completedCategoryItems}/${categoryItems}`;
+                    }
+                    
+                    // Atualiza também os botões de disciplinas
+                    const progressBtnElement = document.getElementById(`${category}ProgressBtn`);
+                    if (progressBtnElement) {
+                        progressBtnElement.textContent = `${completedCategoryItems}/${categoryItems}`;
                     }
                 });
             }
@@ -1666,6 +1824,50 @@
             alert('Dados sincronizados!');
         });
         
+        // ========== NOVAS FUNÇÕES PARA OS BOTÕES DE DISCIPLINAS ==========
+        
+        // Event listener para o dropdown de disciplinas
+        document.getElementById('disciplineSelect').addEventListener('change', function() {
+            const selectedDiscipline = this.value;
+            if (selectedDiscipline) {
+                scrollToDiscipline(selectedDiscipline);
+                this.value = ''; // Reset do dropdown
+            }
+        });
+        
+        // Event listener para os botões grandes de disciplinas
+        document.querySelectorAll('.discipline-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const disciplina = this.getAttribute('data-disciplina');
+                scrollToDiscipline(disciplina);
+            });
+        });
+        
+        // Função para rolar até uma disciplina específica
+        function scrollToDiscipline(disciplinaKey) {
+            // Primeiro, verifica se há um órgão selecionado
+            if (!currentState) {
+                alert('Selecione um órgão primeiro!');
+                return;
+            }
+            
+            // Encontra a categoria correspondente
+            const categoryElement = document.querySelector(`.category[data-disciplina="${getCategoryDisplayName(disciplinaKey)}"]`);
+            
+            if (categoryElement) {
+                // Rola até a categoria
+                categoryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Destaca a categoria por alguns segundos
+                categoryElement.style.boxShadow = '0 0 0 3px rgba(52, 152, 219, 0.5)';
+                categoryElement.style.transition = 'box-shadow 0.3s';
+                
+                setTimeout(() => {
+                    categoryElement.style.boxShadow = '';
+                }, 2000);
+            }
+        }
+        
         // ========== SISTEMA DE CICLO REDONDO ==========
         
         // Iniciar ciclo de estudos
@@ -1866,3 +2068,26 @@
     </script>
 </body>
 </html>
+```
+
+## Principais melhorias implementadas:
+
+1. **Dropdown de seleção de disciplinas**: Adicionei um menu suspenso na área de busca para selecionar rapidamente uma disciplina.
+
+2. **Botões grandes para disciplinas**: Criei uma seção com botões grandes e coloridos para cada disciplina, com:
+   - Design atrativo e responsivo
+   - Indicador de progresso (concluído/total)
+   - Efeitos de hover para melhor interatividade
+   - Layout em grid que se adapta a diferentes tamanhos de tela
+
+3. **Navegação aprimorada**:
+   - Ao clicar em um botão de disciplina, a página rola automaticamente até a seção correspondente
+   - A seção é destacada temporariamente para facilitar a identificação
+   - Funciona tanto com os botões grandes quanto com o dropdown
+
+4. **Melhorias visuais**:
+   - Cores consistentes com o tema do site
+   - Espaçamento adequado para facilitar o clique
+   - Design responsivo que funciona bem em dispositivos móveis
+
+Agora você tem uma forma muito mais intuitiva de navegar pelas disciplinas, sem precisar digitar na busca!
