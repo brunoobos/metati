@@ -234,6 +234,8 @@
             line-height: 1.5;
         }
         
+        /* REMOVIDO: Estilos para palavras com links */
+        /*
         .content-text .linked-word {
             background-color: #fff3cd;
             padding: 1px 4px;
@@ -246,6 +248,7 @@
         .content-text .linked-word:hover {
             background-color: #ffeaa7;
         }
+        */
         
         .content-actions {
             display: flex;
@@ -516,7 +519,8 @@
             margin-top: 0;
         }
         
-        /* Modal para seleção de palavras */
+        /* REMOVIDO: Modal para seleção de palavras */
+        /*
         .word-link-modal {
             display: none;
             position: fixed;
@@ -570,6 +574,7 @@
             background-color: #3498db;
             color: white;
         }
+        */
         
         @media (max-width: 768px) {
             .menu-toggle {
@@ -747,12 +752,9 @@
             </button>
         </div>
         
-        <div class="states-container">
-            <button class="state-btn" data-state="TCU">TCU</button>
-        </div>
-        
-        <div id="stateInfo" class="state-info">
-            <h2 id="stateName">Órgão</h2>
+        <!-- ALTERAÇÃO: Removida a necessidade de selecionar órgão primeiro -->
+        <div id="stateInfo" class="state-info" style="display: block;">
+            <h2 id="stateName">TCU</h2>
             <div class="controls">
                 <button class="filter-btn active" data-filter="all">Todos</button>
                 <button class="filter-btn" data-filter="pending">Pendentes</button>
@@ -799,24 +801,6 @@
                 <div class="category" data-disciplina="GESTÃO DE TI">
                     <h3>GESTÃO DE TI <span class="category-progress" id="gestaoTIProgress">0/0</span></h3>
                     <div class="links" id="gestaoTILinks"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Modal para seleção de palavras -->
-    <div class="word-link-modal" id="wordLinkModal">
-        <div class="word-link-modal-content">
-            <h3>Adicionar Link a uma Palavra</h3>
-            <p>Selecione uma palavra para adicionar um link:</p>
-            <div class="word-selection" id="wordSelection">
-                <!-- As palavras serão inseridas aqui dinamicamente -->
-            </div>
-            <div class="link-input-container" id="modalLinkInput">
-                <input type="text" class="link-input" id="modalLinkUrl" placeholder="Cole aqui o link...">
-                <div class="link-actions">
-                    <button class="link-save" id="modalLinkSave">Salvar</button>
-                    <button class="link-cancel" id="modalLinkCancel">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -924,9 +908,8 @@
         // Sistema de progresso
         let progressData = {};
         let linkData = {};
-        let wordLinks = {}; // Novo objeto para armazenar links de palavras
         let isOnline = false;
-        let currentState = null;
+        let currentState = 'TCU'; // ALTERAÇÃO: Definindo TCU como padrão
         let currentDiscipline = null;
         let currentItemId = null; // Para rastrear o item atual
 
@@ -961,13 +944,11 @@
             if (action === 'getProgress') {
                 const storedProgress = JSON.parse(localStorage.getItem('progressData')) || {};
                 const storedLinkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                const storedWordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
                 
                 return {
                     success: true,
                     progressData: storedProgress,
-                    linkData: storedLinkData,
-                    wordLinks: storedWordLinks
+                    linkData: storedLinkData
                 };
             }
             return { success: false };
@@ -990,14 +971,12 @@
             // Salva localmente como fallback
             localStorage.setItem('progressData', JSON.stringify(progressData));
             localStorage.setItem('linkData', JSON.stringify(linkData));
-            localStorage.setItem('wordLinks', JSON.stringify(wordLinks));
             
             // Tenta salvar no servidor
             try {
                 const result = await makeRequest('saveProgress', {
                     progressData: progressData,
-                    linkData: linkData,
-                    wordLinks: wordLinks
+                    linkData: linkData
                 });
                 
                 if (result.success) {
@@ -1020,18 +999,15 @@
                 if (result.success) {
                     progressData = result.progressData || {};
                     linkData = result.linkData || {};
-                    wordLinks = result.wordLinks || {};
                 } else {
                     // Fallback para localStorage
                     progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                     linkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                    wordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
                 }
             } catch (error) {
                 console.warn('Erro ao carregar do servidor, usando localStorage');
                 progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                 linkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                wordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
             }
             
             updateProgressDisplay();
@@ -1087,7 +1063,7 @@
             }
         }
         
-        // Função para criar um item de conteúdo com palavras linkáveis
+        // Função para criar um item de conteúdo (REMOVIDOS: links de palavras)
         function createContentItem(text, org, category, index) {
             const itemId = `${org}-${category}-${index}`;
             const isCompleted = progressData[org] && progressData[org][category] && progressData[org][category][itemId];
@@ -1119,9 +1095,8 @@
             const textSpan = document.createElement('span');
             textSpan.className = 'content-text';
             
-            // Processa o texto para adicionar links nas palavras
-            const processedText = processTextWithLinks(text, itemId);
-            textSpan.innerHTML = processedText;
+            // ALTERAÇÃO: Texto sem links nas palavras
+            textSpan.textContent = text;
             
             itemDiv.appendChild(checkbox);
             itemDiv.appendChild(textSpan);
@@ -1162,15 +1137,7 @@
                 actionsDiv.appendChild(addLinkBtn);
             }
             
-            // Botão para adicionar link a palavras específicas
-            const addWordLinkBtn = document.createElement('button');
-            addWordLinkBtn.className = 'add-link-btn';
-            addWordLinkBtn.textContent = '+ Link Palavra';
-            addWordLinkBtn.style.backgroundColor = '#9b59b6';
-            addWordLinkBtn.addEventListener('click', function() {
-                showWordLinkModal(itemId, text);
-            });
-            actionsDiv.appendChild(addWordLinkBtn);
+            // REMOVIDO: Botão para adicionar link a palavras específicas
             
             itemDiv.appendChild(actionsDiv);
             
@@ -1204,135 +1171,6 @@
             
             return itemDiv;
         }
-        
-        // Função para processar texto e adicionar links nas palavras
-        function processTextWithLinks(text, itemId) {
-            // Divide o texto em palavras, mantendo pontuação
-            const words = text.split(/(\s+)/);
-            
-            return words.map(word => {
-                // Remove pontuação no final das palavras para verificação
-                const cleanWord = word.replace(/[.,;:!?()]$/, '');
-                
-                // Verifica se esta palavra tem um link
-                const wordKey = `${itemId}-${cleanWord.toLowerCase()}`;
-                if (wordLinks[wordKey]) {
-                    // Se tem link, cria um span com link
-                    const link = document.createElement('a');
-                    link.href = wordLinks[wordKey];
-                    link.target = '_blank';
-                    link.className = 'linked-word';
-                    link.title = wordLinks[wordKey];
-                    link.textContent = word;
-                    
-                    // Cria um container para o link
-                    const container = document.createElement('span');
-                    container.appendChild(link);
-                    
-                    return container.outerHTML;
-                }
-                
-                // Se não tem link, retorna a palavra normal
-                return word;
-            }).join('');
-        }
-        
-        // Função para mostrar modal de seleção de palavras
-        function showWordLinkModal(itemId, text) {
-            currentItemId = itemId;
-            const modal = document.getElementById('wordLinkModal');
-            const wordSelection = document.getElementById('wordSelection');
-            const modalLinkInput = document.getElementById('modalLinkInput');
-            
-            // Limpa seleção anterior
-            wordSelection.innerHTML = '';
-            modalLinkInput.style.display = 'none';
-            
-            // Extrai palavras únicas do texto (ignorando números e palavras muito curtas)
-            const words = text.split(/\s+/)
-                .map(word => word.replace(/[.,;:!?()]/g, ''))
-                .filter(word => word.length > 3 && !word.match(/^\d+$/))
-                .filter((word, index, self) => self.indexOf(word) === index); // Remove duplicatas
-            
-            // Adiciona palavras à seleção
-            words.forEach(word => {
-                const wordOption = document.createElement('div');
-                wordOption.className = 'word-option';
-                wordOption.textContent = word;
-                wordOption.dataset.word = word;
-                
-                wordOption.addEventListener('click', function() {
-                    // Remove seleção anterior
-                    document.querySelectorAll('.word-option').forEach(opt => {
-                        opt.classList.remove('selected');
-                    });
-                    
-                    // Seleciona esta palavra
-                    this.classList.add('selected');
-                    
-                    // Mostra o input de link
-                    modalLinkInput.style.display = 'block';
-                    
-                    // Preenche com link existente se houver
-                    const wordKey = `${itemId}-${word.toLowerCase()}`;
-                    document.getElementById('modalLinkUrl').value = wordLinks[wordKey] || '';
-                });
-                
-                wordSelection.appendChild(wordOption);
-            });
-            
-            // Mostra o modal
-            modal.style.display = 'flex';
-        }
-        
-        // Event listeners para o modal de palavras
-        document.getElementById('modalLinkSave').addEventListener('click', function() {
-            const selectedWord = document.querySelector('.word-option.selected');
-            const linkUrl = document.getElementById('modalLinkUrl').value.trim();
-            
-            if (!selectedWord) {
-                alert('Selecione uma palavra primeiro!');
-                return;
-            }
-            
-            if (!linkUrl) {
-                alert('Digite um URL válido!');
-                return;
-            }
-            
-            const word = selectedWord.dataset.word;
-            const wordKey = `${currentItemId}-${word.toLowerCase()}`;
-            
-            // Salva o link
-            wordLinks[wordKey] = linkUrl;
-            saveProgress();
-            
-            // Fecha o modal
-            document.getElementById('wordLinkModal').style.display = 'none';
-            
-            // Atualiza a exibição do item
-            const itemDiv = document.querySelector(`[data-item-id="${currentItemId}"]`);
-            if (itemDiv) {
-                const text = itemDiv.dataset.text;
-                const org = currentItemId.split('-')[0];
-                const category = currentItemId.split('-')[1];
-                const index = currentItemId.split('-')[2];
-                
-                const newItem = createContentItem(text, org, category, index);
-                itemDiv.parentNode.replaceChild(newItem, itemDiv);
-            }
-        });
-        
-        document.getElementById('modalLinkCancel').addEventListener('click', function() {
-            document.getElementById('wordLinkModal').style.display = 'none';
-        });
-        
-        // Fecha o modal ao clicar fora
-        document.getElementById('wordLinkModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                this.style.display = 'none';
-            }
-        });
         
         // Função para mostrar input de link do item
         function showLinkInput(itemId, itemDiv) {
@@ -1474,13 +1312,9 @@
             document.getElementById('stateInfo').scrollIntoView({ behavior: 'smooth' });
         }
         
-        // Adiciona eventos de clique para cada botão de órgão
-        document.querySelectorAll('.state-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const stateId = this.getAttribute('data-state');
-                const stateName = this.textContent;
-                loadStateContent(stateId, stateName);
-            });
+        // ALTERAÇÃO: Carregar conteúdo do TCU automaticamente
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStateContent('TCU', 'TCU');
         });
         
         // Função de pesquisa aprimorada
@@ -1488,139 +1322,72 @@
             searchTerm = searchTerm.toLowerCase().trim();
             
             if (!searchTerm) {
-                // Se não há termo de pesquisa, mostra todos os órgãos
-                document.querySelectorAll('.state-btn').forEach(btn => {
-                    btn.style.display = 'block';
+                // Se não há termo de pesquisa, mostra todos os itens
+                document.querySelectorAll('.content-item').forEach(item => {
+                    item.style.display = 'flex';
                 });
                 
-                // Se já tem um órgão selecionado, mantém as disciplinas visíveis
-                if (currentState) {
-                    document.querySelectorAll('.category').forEach(category => {
-                        category.style.display = 'block';
-                    });
-                    document.querySelectorAll('.content-item').forEach(item => {
-                        item.style.display = 'flex';
-                    });
-                }
+                document.querySelectorAll('.category').forEach(category => {
+                    category.style.display = 'block';
+                });
+                
                 return;
             }
             
             switch(filterType) {
                 case 'orgao':
-                    // Filtra apenas órgãos
-                    document.querySelectorAll('.state-btn').forEach(btn => {
-                        const stateName = btn.textContent.toLowerCase();
-                        if (stateName.includes(searchTerm)) {
-                            btn.style.display = 'block';
+                    // Filtra apenas órgãos (não aplicável agora)
+                    break;
+                    
+                case 'disciplina':
+                    // Filtra disciplinas
+                    document.querySelectorAll('.category').forEach(category => {
+                        const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
+                        if (disciplinaName.includes(searchTerm)) {
+                            category.style.display = 'block';
                         } else {
-                            btn.style.display = 'none';
+                            category.style.display = 'none';
                         }
                     });
                     break;
                     
-                case 'disciplina':
-                    // Filtra disciplinas dentro do órgão atual
-                    if (currentState) {
-                        document.querySelectorAll('.category').forEach(category => {
-                            const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
-                            if (disciplinaName.includes(searchTerm)) {
-                                category.style.display = 'block';
-                            } else {
-                                category.style.display = 'none';
-                            }
-                        });
-                    } else {
-                        // Se não há órgão selecionado, pesquisa em todos os órgãos
-                        let found = false;
-                        document.querySelectorAll('.state-btn').forEach(btn => {
-                            const stateId = btn.getAttribute('data-state');
-                            if (stateLinks[stateId]) {
-                                for (const category in stateLinks[stateId]) {
-                                    const categoryName = getCategoryDisplayName(category).toLowerCase();
-                                    if (categoryName.includes(searchTerm)) {
-                                        btn.style.display = 'block';
-                                        found = true;
-                                        break;
-                                    }
-                                }
-                            }
-                        });
-                    }
-                    break;
-                    
                 case 'conteudo':
                     // Filtra conteúdos específicos
-                    if (currentState) {
-                        document.querySelectorAll('.content-item').forEach(item => {
-                            const itemText = item.dataset.text;
-                            if (itemText.includes(searchTerm)) {
-                                item.style.display = 'flex';
-                            } else {
-                                item.style.display = 'none';
-                            }
-                        });
-                    }
+                    document.querySelectorAll('.content-item').forEach(item => {
+                        const itemText = item.dataset.text;
+                        if (itemText.includes(searchTerm)) {
+                            item.style.display = 'flex';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
                     break;
                     
                 case 'all':
                 default:
                     // Pesquisa em tudo
-                    let foundInOrgao = false;
-                    
-                    // Primeiro pesquisa nos órgãos
-                    document.querySelectorAll('.state-btn').forEach(btn => {
-                        const stateName = btn.textContent.toLowerCase();
-                        const stateId = btn.getAttribute('data-state');
-                        
-                        if (stateName.includes(searchTerm)) {
-                            btn.style.display = 'block';
-                            foundInOrgao = true;
-                        } else if (stateLinks[stateId]) {
-                            // Pesquisa nas disciplinas do órgão
-                            let foundInDisciplina = false;
-                            for (const category in stateLinks[stateId]) {
-                                const categoryName = getCategoryDisplayName(category).toLowerCase();
-                                if (categoryName.includes(searchTerm)) {
-                                    btn.style.display = 'block';
-                                    foundInOrgao = true;
-                                    foundInDisciplina = true;
-                                    break;
-                                }
-                            }
-                            
-                            if (!foundInDisciplina) {
-                                btn.style.display = 'none';
-                            }
+                    document.querySelectorAll('.category').forEach(category => {
+                        const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
+                        if (disciplinaName.includes(searchTerm)) {
+                            category.style.display = 'block';
                         } else {
-                            btn.style.display = 'none';
+                            // Verifica se há conteúdos que correspondem
+                            const items = category.querySelectorAll('.content-item');
+                            let hasMatchingItems = false;
+                            
+                            items.forEach(item => {
+                                const itemText = item.dataset.text;
+                                if (itemText.includes(searchTerm)) {
+                                    item.style.display = 'flex';
+                                    hasMatchingItems = true;
+                                } else {
+                                    item.style.display = 'none';
+                                }
+                            });
+                            
+                            category.style.display = hasMatchingItems ? 'block' : 'none';
                         }
                     });
-                    
-                    // Se há um órgão selecionado, pesquisa também nos conteúdos
-                    if (currentState) {
-                        document.querySelectorAll('.category').forEach(category => {
-                            const disciplinaName = category.getAttribute('data-disciplina').toLowerCase();
-                            if (disciplinaName.includes(searchTerm)) {
-                                category.style.display = 'block';
-                            } else {
-                                // Verifica se há conteúdos que correspondem
-                                const items = category.querySelectorAll('.content-item');
-                                let hasMatchingItems = false;
-                                
-                                items.forEach(item => {
-                                    const itemText = item.dataset.text;
-                                    if (itemText.includes(searchTerm)) {
-                                        item.style.display = 'flex';
-                                        hasMatchingItems = true;
-                                    } else {
-                                        item.style.display = 'none';
-                                    }
-                                });
-                                
-                                category.style.display = hasMatchingItems ? 'block' : 'none';
-                            }
-                        });
-                    }
                     break;
             }
         }
@@ -1683,15 +1450,6 @@
         
         // Função para mostrar apenas a disciplina selecionada
         function showOnlySelectedDiscipline(disciplinaKey) {
-            // Primeiro, verifica se há um órgão selecionado
-            if (!currentState) {
-                alert('Selecione um órgão primeiro!');
-                return;
-            }
-            
-            // Define a disciplina atual
-            currentDiscipline = disciplinaKey;
-            
             // Obtém o nome de exibição da disciplina
             const displayName = getCategoryDisplayName(disciplinaKey);
             
