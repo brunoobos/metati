@@ -253,22 +253,6 @@
             background-color: #2980b9;
         }
         
-        .edit-link-btn {
-            padding: 5px 8px;
-            background-color: #f39c12;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.8em;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            white-space: nowrap;
-        }
-        
-        .edit-link-btn:hover {
-            background-color: #e67e22;
-        }
-        
         .add-link-btn {
             padding: 5px 10px;
             background-color: #95a5a6;
@@ -570,7 +554,7 @@
                 justify-content: flex-start;
             }
             
-            .content-link, .edit-link-btn, .add-link-btn {
+            .content-link, .add-link-btn {
                 flex: 1;
                 text-align: center;
             }
@@ -705,6 +689,7 @@
                 <button class="filter-btn active" data-filter="all">Todos</button>
                 <button class="filter-btn" data-filter="pending">Pendentes</button>
                 <button class="filter-btn" data-filter="completed">Concluídos</button>
+                <button class="filter-btn" id="showAllBtn" style="background-color: #9b59b6;">Todas as Disciplinas</button>
             </div>
             
             <div class="state-categories">
@@ -786,7 +771,7 @@
                 engenhariaDados: [
                     { text: '1 Bancos de Dados. Relacionais: Oracle e Microsoft SQL Server. Não relacionais (NoSQL): Elasticsearch e MongoDB. Modelagens de dados. Relacional, multidimensional, nosql. SQL (Procedural Language / Structured Query Language).' },
                     { text: '2 Arquitetura de Inteligência de Negócio. DataWarehouse, DataMart, DataLake, DataMesh. ' },
-                    { text: '3 Conectores e integação com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
+                    { text: '3 Conectores e integração com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
                     { text: '4 Fluxo de manipulação de dados. ETL. Pepiline de dados: versionamento, logging e auditoria, tolerância a falhas, retries e checkpoints, Integração com CI/CD' },
                     { text: '5 Governança e Qualidade de Dados. Linhagem e catalogação. Qualidade de dados: validação, conformidade, deduplicação. Metadados, glossários de dados, políticas de acesso.' },
                     { text: '6 Integração com nuvem. Serviços gerenciados (Azure Data Factory, Azure Service Fabric, Azure Databricks). Armazenamento (S3, Azure Blob, GCS). Integração com serviços de IA e análise.' }
@@ -1072,20 +1057,30 @@
                 link.target = '_blank';
                 actionsDiv.appendChild(link);
                 
-                // Botão para editar link
-                const editBtn = document.createElement('button');
-                editBtn.className = 'edit-link-btn';
-                editBtn.textContent = 'Editar';
-                editBtn.addEventListener('click', function() {
-                    showLinkInput(itemId, itemDiv, true);
+                // Botão para remover link
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'link-remove';
+                removeBtn.textContent = 'Remover';
+                removeBtn.addEventListener('click', function() {
+                    delete linkData[itemId];
+                    saveProgress();
+                    
+                    // Recria o item para atualizar a interface
+                    const org = itemId.split('-')[0];
+                    const category = itemId.split('-')[1];
+                    const index = itemId.split('-')[2];
+                    const text = itemDiv.querySelector('.content-text').textContent;
+                    
+                    const newItem = createContentItem(text, org, category, index);
+                    itemDiv.parentNode.replaceChild(newItem, itemDiv);
                 });
-                actionsDiv.appendChild(editBtn);
+                actionsDiv.appendChild(removeBtn);
             } else {
                 const addLinkBtn = document.createElement('button');
                 addLinkBtn.className = 'add-link-btn';
                 addLinkBtn.textContent = '+ Link';
                 addLinkBtn.addEventListener('click', function() {
-                    showLinkInput(itemId, itemDiv, false);
+                    showLinkInput(itemId, itemDiv);
                 });
                 actionsDiv.appendChild(addLinkBtn);
             }
@@ -1112,13 +1107,8 @@
             cancelBtn.className = 'link-cancel';
             cancelBtn.textContent = 'Cancelar';
             
-            const removeBtn = document.createElement('button');
-            removeBtn.className = 'link-remove';
-            removeBtn.textContent = 'Remover';
-            
             linkActions.appendChild(saveBtn);
             linkActions.appendChild(cancelBtn);
-            linkActions.appendChild(removeBtn);
             
             linkInputContainer.appendChild(linkInput);
             linkInputContainer.appendChild(linkActions);
@@ -1129,7 +1119,7 @@
         }
         
         // Função para mostrar input de link
-        function showLinkInput(itemId, itemDiv, isEditing) {
+        function showLinkInput(itemId, itemDiv) {
             const linkInputContainer = itemDiv.querySelector('.link-input-container');
             const actionsDiv = itemDiv.querySelector('.content-actions');
             
@@ -1139,16 +1129,9 @@
             const linkInput = linkInputContainer.querySelector('.link-input');
             const saveBtn = linkInputContainer.querySelector('.link-save');
             const cancelBtn = linkInputContainer.querySelector('.link-cancel');
-            const removeBtn = linkInputContainer.querySelector('.link-remove');
             
-            // Preenche o input se estiver editando
-            if (isEditing) {
-                linkInput.value = linkData[itemId] || '';
-                removeBtn.style.display = 'block';
-            } else {
-                linkInput.value = '';
-                removeBtn.style.display = 'none';
-            }
+            // Preenche o input se já houver um link
+            linkInput.value = linkData[itemId] || '';
             
             // Foca no input
             linkInput.focus();
@@ -1169,21 +1152,6 @@
                     const newItem = createContentItem(text, org, category, index);
                     itemDiv.parentNode.replaceChild(newItem, itemDiv);
                 }
-            };
-            
-            // Remover link
-            removeBtn.onclick = function() {
-                delete linkData[itemId];
-                saveProgress();
-                
-                // Recria o item para atualizar a interface
-                const org = itemId.split('-')[0];
-                const category = itemId.split('-')[1];
-                const index = itemId.split('-')[2];
-                const text = itemDiv.querySelector('.content-text').textContent;
-                
-                const newItem = createContentItem(text, org, category, index);
-                itemDiv.parentNode.replaceChild(newItem, itemDiv);
             };
             
             // Cancelar
@@ -1542,32 +1510,10 @@
             currentDiscipline = null;
         }
         
-        // Adiciona um botão para mostrar todas as disciplinas
-        function addShowAllButton() {
-            const controls = document.querySelector('.controls');
-            
-            // Verifica se o botão já existe
-            if (!document.getElementById('showAllBtn')) {
-                const showAllBtn = document.createElement('button');
-                showAllBtn.id = 'showAllBtn';
-                showAllBtn.className = 'filter-btn';
-                showAllBtn.textContent = 'Todas as Disciplinas';
-                showAllBtn.style.backgroundColor = '#9b59b6';
-                
-                showAllBtn.addEventListener('click', function() {
-                    showAllDisciplines();
-                });
-                
-                controls.appendChild(showAllBtn);
-            }
-        }
-        
-        // Modifica a função loadStateContent para adicionar o botão
-        const originalLoadStateContent = loadStateContent;
-        loadStateContent = function(stateId, stateName) {
-            originalLoadStateContent(stateId, stateName);
-            addShowAllButton();
-        };
+        // Botão para mostrar todas as disciplinas
+        document.getElementById('showAllBtn').addEventListener('click', function() {
+            showAllDisciplines();
+        });
         
         // Carrega os dados quando a página inicia
         document.addEventListener('DOMContentLoaded', async function() {
