@@ -204,7 +204,7 @@
         
         .content-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 10px;
             padding: 10px;
             border-radius: 4px;
@@ -226,10 +226,25 @@
             width: 18px;
             height: 18px;
             cursor: pointer;
+            margin-top: 3px;
         }
         
         .content-text {
             flex: 1;
+            line-height: 1.5;
+        }
+        
+        .content-text .linked-word {
+            background-color: #fff3cd;
+            padding: 1px 4px;
+            border-radius: 3px;
+            border-bottom: 1px dashed #ffc107;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .content-text .linked-word:hover {
+            background-color: #ffeaa7;
         }
         
         .content-actions {
@@ -501,6 +516,61 @@
             margin-top: 0;
         }
         
+        /* Modal para seleção de palavras */
+        .word-link-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .word-link-modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+        
+        .word-link-modal h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        
+        .word-selection {
+            margin: 15px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        
+        .word-option {
+            padding: 5px 10px;
+            margin: 2px 0;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.2s;
+        }
+        
+        .word-option:hover {
+            background-color: #e9ecef;
+        }
+        
+        .word-option.selected {
+            background-color: #3498db;
+            color: white;
+        }
+        
         @media (max-width: 768px) {
             .menu-toggle {
                 display: block;
@@ -679,8 +749,6 @@
         
         <div class="states-container">
             <button class="state-btn" data-state="TCU">TCU</button>
-            <button class="state-btn" data-state="TCE_RJ">TCE RJ</button>
-            <button class="state-btn" data-state="TCE_SC">TCE SC</button>
         </div>
         
         <div id="stateInfo" class="state-info">
@@ -736,6 +804,24 @@
         </div>
     </div>
     
+    <!-- Modal para seleção de palavras -->
+    <div class="word-link-modal" id="wordLinkModal">
+        <div class="word-link-modal-content">
+            <h3>Adicionar Link a uma Palavra</h3>
+            <p>Selecione uma palavra para adicionar um link:</p>
+            <div class="word-selection" id="wordSelection">
+                <!-- As palavras serão inseridas aqui dinamicamente -->
+            </div>
+            <div class="link-input-container" id="modalLinkInput">
+                <input type="text" class="link-input" id="modalLinkUrl" placeholder="Cole aqui o link...">
+                <div class="link-actions">
+                    <button class="link-save" id="modalLinkSave">Salvar</button>
+                    <button class="link-cancel" id="modalLinkCancel">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <footer>
         <p>Atualizado em <span id="updateDate"></span> | Meta TI - Preparação para Concursos</p>
         <p>© 2025 Meta TI - Todos os direitos reservados</p>
@@ -756,7 +842,7 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
         
-        // Dados atualizados com disciplinas de TI (nova ordem)
+        // Dados atualizados com disciplinas de TI (apenas TCU)
         const stateLinks = {
             'TCU': {
                 infraestruturaTI: [
@@ -832,31 +918,17 @@
                     { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos' },
                     { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD' }
                 ]
-            },
-            'TCE_RJ': {
-                gestaoTI: [
-                    { text: 'Gestão de TI para TCE RJ - ITIL e COBIT' }
-                ],
-                segurancaInformacao: [
-                    { text: 'Segurança da Informação em Tribunais de Contas' }
-                ]
-            },
-            'TCE_SC': {
-                gestaoTI: [
-                    { text: 'Gestão de TI para TCE SC - ITIL e COBIT' }
-                ],
-                segurancaInformacao: [
-                    { text: 'Segurança da Informação em Tribunais de Contas' }
-                ]
             }
         };
 
         // Sistema de progresso
         let progressData = {};
         let linkData = {};
+        let wordLinks = {}; // Novo objeto para armazenar links de palavras
         let isOnline = false;
         let currentState = null;
         let currentDiscipline = null;
+        let currentItemId = null; // Para rastrear o item atual
 
         // Função para fazer requisições para o Google Apps Script
         async function makeRequest(action, data = {}) {
@@ -889,11 +961,13 @@
             if (action === 'getProgress') {
                 const storedProgress = JSON.parse(localStorage.getItem('progressData')) || {};
                 const storedLinkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                const storedWordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
                 
                 return {
                     success: true,
                     progressData: storedProgress,
-                    linkData: storedLinkData
+                    linkData: storedLinkData,
+                    wordLinks: storedWordLinks
                 };
             }
             return { success: false };
@@ -916,12 +990,14 @@
             // Salva localmente como fallback
             localStorage.setItem('progressData', JSON.stringify(progressData));
             localStorage.setItem('linkData', JSON.stringify(linkData));
+            localStorage.setItem('wordLinks', JSON.stringify(wordLinks));
             
             // Tenta salvar no servidor
             try {
                 const result = await makeRequest('saveProgress', {
                     progressData: progressData,
-                    linkData: linkData
+                    linkData: linkData,
+                    wordLinks: wordLinks
                 });
                 
                 if (result.success) {
@@ -944,15 +1020,18 @@
                 if (result.success) {
                     progressData = result.progressData || {};
                     linkData = result.linkData || {};
+                    wordLinks = result.wordLinks || {};
                 } else {
                     // Fallback para localStorage
                     progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                     linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                    wordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
                 }
             } catch (error) {
                 console.warn('Erro ao carregar do servidor, usando localStorage');
                 progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                 linkData = JSON.parse(localStorage.getItem('linkData')) || {};
+                wordLinks = JSON.parse(localStorage.getItem('wordLinks')) || {};
             }
             
             updateProgressDisplay();
@@ -1008,7 +1087,7 @@
             }
         }
         
-        // Função para criar um item de conteúdo
+        // Função para criar um item de conteúdo com palavras linkáveis
         function createContentItem(text, org, category, index) {
             const itemId = `${org}-${category}-${index}`;
             const isCompleted = progressData[org] && progressData[org][category] && progressData[org][category][itemId];
@@ -1039,7 +1118,10 @@
             
             const textSpan = document.createElement('span');
             textSpan.className = 'content-text';
-            textSpan.textContent = text;
+            
+            // Processa o texto para adicionar links nas palavras
+            const processedText = processTextWithLinks(text, itemId);
+            textSpan.innerHTML = processedText;
             
             itemDiv.appendChild(checkbox);
             itemDiv.appendChild(textSpan);
@@ -1048,7 +1130,7 @@
             const actionsDiv = document.createElement('div');
             actionsDiv.className = 'content-actions';
             
-            // Link para resumo
+            // Link para resumo (link do item completo)
             if (itemLink) {
                 const link = document.createElement('a');
                 link.href = itemLink;
@@ -1057,7 +1139,7 @@
                 link.target = '_blank';
                 actionsDiv.appendChild(link);
                 
-                // Botão para remover link
+                // Botão para remover link do item
                 const removeBtn = document.createElement('button');
                 removeBtn.className = 'link-remove';
                 removeBtn.textContent = 'Remover';
@@ -1066,11 +1148,6 @@
                     saveProgress();
                     
                     // Recria o item para atualizar a interface
-                    const org = itemId.split('-')[0];
-                    const category = itemId.split('-')[1];
-                    const index = itemId.split('-')[2];
-                    const text = itemDiv.querySelector('.content-text').textContent;
-                    
                     const newItem = createContentItem(text, org, category, index);
                     itemDiv.parentNode.replaceChild(newItem, itemDiv);
                 });
@@ -1078,16 +1155,26 @@
             } else {
                 const addLinkBtn = document.createElement('button');
                 addLinkBtn.className = 'add-link-btn';
-                addLinkBtn.textContent = '+ Link';
+                addLinkBtn.textContent = '+ Link Item';
                 addLinkBtn.addEventListener('click', function() {
                     showLinkInput(itemId, itemDiv);
                 });
                 actionsDiv.appendChild(addLinkBtn);
             }
             
+            // Botão para adicionar link a palavras específicas
+            const addWordLinkBtn = document.createElement('button');
+            addWordLinkBtn.className = 'add-link-btn';
+            addWordLinkBtn.textContent = '+ Link Palavra';
+            addWordLinkBtn.style.backgroundColor = '#9b59b6';
+            addWordLinkBtn.addEventListener('click', function() {
+                showWordLinkModal(itemId, text);
+            });
+            actionsDiv.appendChild(addWordLinkBtn);
+            
             itemDiv.appendChild(actionsDiv);
             
-            // Container para input de link
+            // Container para input de link do item
             const linkInputContainer = document.createElement('div');
             linkInputContainer.className = 'link-input-container';
             
@@ -1118,7 +1205,136 @@
             return itemDiv;
         }
         
-        // Função para mostrar input de link
+        // Função para processar texto e adicionar links nas palavras
+        function processTextWithLinks(text, itemId) {
+            // Divide o texto em palavras, mantendo pontuação
+            const words = text.split(/(\s+)/);
+            
+            return words.map(word => {
+                // Remove pontuação no final das palavras para verificação
+                const cleanWord = word.replace(/[.,;:!?()]$/, '');
+                
+                // Verifica se esta palavra tem um link
+                const wordKey = `${itemId}-${cleanWord.toLowerCase()}`;
+                if (wordLinks[wordKey]) {
+                    // Se tem link, cria um span com link
+                    const link = document.createElement('a');
+                    link.href = wordLinks[wordKey];
+                    link.target = '_blank';
+                    link.className = 'linked-word';
+                    link.title = wordLinks[wordKey];
+                    link.textContent = word;
+                    
+                    // Cria um container para o link
+                    const container = document.createElement('span');
+                    container.appendChild(link);
+                    
+                    return container.outerHTML;
+                }
+                
+                // Se não tem link, retorna a palavra normal
+                return word;
+            }).join('');
+        }
+        
+        // Função para mostrar modal de seleção de palavras
+        function showWordLinkModal(itemId, text) {
+            currentItemId = itemId;
+            const modal = document.getElementById('wordLinkModal');
+            const wordSelection = document.getElementById('wordSelection');
+            const modalLinkInput = document.getElementById('modalLinkInput');
+            
+            // Limpa seleção anterior
+            wordSelection.innerHTML = '';
+            modalLinkInput.style.display = 'none';
+            
+            // Extrai palavras únicas do texto (ignorando números e palavras muito curtas)
+            const words = text.split(/\s+/)
+                .map(word => word.replace(/[.,;:!?()]/g, ''))
+                .filter(word => word.length > 3 && !word.match(/^\d+$/))
+                .filter((word, index, self) => self.indexOf(word) === index); // Remove duplicatas
+            
+            // Adiciona palavras à seleção
+            words.forEach(word => {
+                const wordOption = document.createElement('div');
+                wordOption.className = 'word-option';
+                wordOption.textContent = word;
+                wordOption.dataset.word = word;
+                
+                wordOption.addEventListener('click', function() {
+                    // Remove seleção anterior
+                    document.querySelectorAll('.word-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    
+                    // Seleciona esta palavra
+                    this.classList.add('selected');
+                    
+                    // Mostra o input de link
+                    modalLinkInput.style.display = 'block';
+                    
+                    // Preenche com link existente se houver
+                    const wordKey = `${itemId}-${word.toLowerCase()}`;
+                    document.getElementById('modalLinkUrl').value = wordLinks[wordKey] || '';
+                });
+                
+                wordSelection.appendChild(wordOption);
+            });
+            
+            // Mostra o modal
+            modal.style.display = 'flex';
+        }
+        
+        // Event listeners para o modal de palavras
+        document.getElementById('modalLinkSave').addEventListener('click', function() {
+            const selectedWord = document.querySelector('.word-option.selected');
+            const linkUrl = document.getElementById('modalLinkUrl').value.trim();
+            
+            if (!selectedWord) {
+                alert('Selecione uma palavra primeiro!');
+                return;
+            }
+            
+            if (!linkUrl) {
+                alert('Digite um URL válido!');
+                return;
+            }
+            
+            const word = selectedWord.dataset.word;
+            const wordKey = `${currentItemId}-${word.toLowerCase()}`;
+            
+            // Salva o link
+            wordLinks[wordKey] = linkUrl;
+            saveProgress();
+            
+            // Fecha o modal
+            document.getElementById('wordLinkModal').style.display = 'none';
+            
+            // Atualiza a exibição do item
+            const itemDiv = document.querySelector(`[data-item-id="${currentItemId}"]`);
+            if (itemDiv) {
+                const text = itemDiv.dataset.text;
+                const org = currentItemId.split('-')[0];
+                const category = currentItemId.split('-')[1];
+                const index = currentItemId.split('-')[2];
+                
+                const newItem = createContentItem(text, org, category, index);
+                itemDiv.parentNode.replaceChild(newItem, itemDiv);
+            }
+        });
+        
+        document.getElementById('modalLinkCancel').addEventListener('click', function() {
+            document.getElementById('wordLinkModal').style.display = 'none';
+        });
+        
+        // Fecha o modal ao clicar fora
+        document.getElementById('wordLinkModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.style.display = 'none';
+            }
+        });
+        
+        // Função para mostrar input de link do item
         function showLinkInput(itemId, itemDiv) {
             const linkInputContainer = itemDiv.querySelector('.link-input-container');
             const actionsDiv = itemDiv.querySelector('.content-actions');
