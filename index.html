@@ -432,202 +432,6 @@
             z-index: 1000;
         }
         
-        /* Novos estilos para o ciclo de estudos */
-        .study-cycle-container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 20px;
-            margin: 20px 0;
-        }
-        
-        .study-cycle-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #3498db;
-        }
-        
-        .study-cycle-title {
-            color: #2c3e50;
-            margin: 0;
-            font-size: 1.5em;
-        }
-        
-        .study-cycle-controls {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .cycle-btn {
-            padding: 8px 15px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            font-size: 0.9em;
-        }
-        
-        .cycle-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .cycle-btn.reset {
-            background-color: #e74c3c;
-        }
-        
-        .cycle-btn.reset:hover {
-            background-color: #c0392b;
-        }
-        
-        .discipline-selection {
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            border: 2px solid #3498db;
-        }
-        
-        .discipline-selection h4 {
-            margin-top: 0;
-            color: #2c3e50;
-            margin-bottom: 15px;
-        }
-        
-        .discipline-checkboxes {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 10px;
-        }
-        
-        .discipline-option {
-            display: flex;
-            align-items: center;
-            padding: 8px;
-            background-color: white;
-            border-radius: 4px;
-            border: 1px solid #ddd;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .discipline-option:hover {
-            background-color: #f0f0f0;
-        }
-        
-        .discipline-option input {
-            margin-right: 8px;
-        }
-        
-        .current-day-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        
-        .current-disciplines {
-            font-size: 1.4em;
-            font-weight: bold;
-            margin: 10px 0;
-            min-height: 60px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 5px;
-        }
-        
-        .discipline-badge {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            padding: 5px 12px;
-            border-radius: 20px;
-            margin: 2px;
-            font-size: 0.9em;
-        }
-        
-        .day-info {
-            font-size: 1.1em;
-            opacity: 0.9;
-        }
-        
-        .cycle-stats {
-            display: flex;
-            justify-content: space-around;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #3498db;
-        }
-        
-        .stat-label {
-            font-size: 0.8em;
-            color: #7f8c8d;
-        }
-        
-        .cycle-progress {
-            margin-top: 15px;
-        }
-        
-        .cycle-progress-bar {
-            height: 10px;
-            background-color: #ecf0f1;
-            border-radius: 5px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .cycle-progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #2ecc71, #27ae60);
-            border-radius: 5px;
-            transition: width 0.5s ease;
-        }
-        
-        .completion-message {
-            text-align: center;
-            padding: 20px;
-            background-color: #e8f6ef;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .disciplines-per-day {
-            margin-top: 10px;
-        }
-        
-        .disciplines-per-day label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        
-        .disciplines-per-day select {
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 100%;
-            max-width: 200px;
-        }
-        
         /* NOVOS ESTILOS PARA OS BOTÕES DE DISCIPLINAS */
         .disciplines-container {
             display: grid;
@@ -780,29 +584,6 @@
                 bottom: 50px;
             }
             
-            .discipline-checkboxes {
-                grid-template-columns: 1fr;
-            }
-            
-            .cycle-stats {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .study-cycle-controls {
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .cycle-btn {
-                width: 100%;
-                text-align: center;
-            }
-            
-            .current-disciplines {
-                font-size: 1.2em;
-            }
-            
             .disciplines-container {
                 grid-template-columns: 1fr;
             }
@@ -822,7 +603,6 @@
             <li><a href="#">Início</a></li>
             <li><a href="#progresso">Meu Progresso</a></li>
             <li><a href="#disciplinas">Disciplinas</a></li>
-            <li><a href="#ciclo">Ciclo de Estudos</a></li>
         </ul>
     </div>
     
@@ -913,99 +693,6 @@
             </button>
         </div>
         
-        <!-- Ciclo de Estudos Redondo -->
-        <div class="study-cycle-container" id="studyCycleContainer" style="display: none;">
-            <div class="study-cycle-header">
-                <h3 class="study-cycle-title">Ciclo de Estudos</h3>
-                <div class="study-cycle-controls">
-                    <button class="cycle-btn" id="prevDayBtn">← Dia Anterior</button>
-                    <button class="cycle-btn" id="markCompleteBtn">✓ Marcar como Concluído</button>
-                    <button class="cycle-btn reset" id="resetCycleBtn">Reiniciar Ciclo</button>
-                </div>
-            </div>
-            
-            <!-- Seção para escolher disciplinas -->
-            <div class="discipline-selection" id="disciplineSelection" style="display: none;">
-                <h4>Escolha as disciplinas para o ciclo:</h4>
-                <div class="discipline-checkboxes">
-                    <label class="discipline-option">
-                        <input type="checkbox" value="infraestruturaTI" checked> INFRAESTRUTURA DE TI
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="engenhariaDados" checked> ENGENHARIA DE DADOS
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="engenhariaSoftware" checked> ENGENHARIA DE SOFTWARE
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="segurancaInformacao" checked> SEGURANÇA DA INFORMAÇÃO
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="computacaoNuvem" checked> COMPUTAÇÃO EM NUVEM
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="inteligenciaArtificial" checked> INTELIGÊNCIA ARTIFICIAL
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="contratacaoTI" checked> CONTRATAÇÕES DE TI
-                    </label>
-                    <label class="discipline-option">
-                        <input type="checkbox" value="gestaoTI" checked> GESTÃO DE TI
-                    </label>
-                </div>
-                
-                <div class="disciplines-per-day">
-                    <label for="disciplinesPerDay">Disciplinas por dia:</label>
-                    <select id="disciplinesPerDay">
-                        <option value="1">1 disciplina</option>
-                        <option value="2" selected>2 disciplinas</option>
-                        <option value="3">3 disciplinas</option>
-                        <option value="4">4 disciplinas</option>
-                    </select>
-                </div>
-                
-                <button class="cycle-btn" id="confirmDisciplinesBtn" style="margin-top: 15px;">Confirmar Disciplinas</button>
-            </div>
-            
-            <div class="current-day-card" id="currentDayCard" style="display: none;">
-                <div class="day-info">Dia <span id="currentDayNumber">1</span> de <span id="totalDays">7</span></div>
-                <div class="current-disciplines" id="currentDisciplinesNames">
-                    <!-- As disciplinas serão inseridas aqui -->
-                </div>
-                <div class="day-info" id="cycleDate">Data do ciclo</div>
-            </div>
-            
-            <div class="cycle-stats">
-                <div class="stat-item">
-                    <div class="stat-value" id="completedDays">0</div>
-                    <div class="stat-label">Dias Concluídos</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="cycleRound">1</div>
-                    <div class="stat-label">Rodada</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalCompleted">0</div>
-                    <div class="stat-label">Total Concluído</div>
-                </div>
-            </div>
-            
-            <div class="completion-message" id="completionMessage">
-                <h4>🎉 Parabéns! Você completou uma rodada do ciclo!</h4>
-                <p>Continue assim! O ciclo reiniciou automaticamente.</p>
-            </div>
-            
-            <div class="cycle-progress">
-                <div class="cycle-progress-bar">
-                    <div class="cycle-progress-fill" id="cycleProgressFill" style="width: 0%"></div>
-                </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.8em; color: #7f8c8d;">
-                    <span>Progresso do Ciclo</span>
-                    <span id="cycleProgressText">0%</span>
-                </div>
-            </div>
-        </div>
-        
         <div class="states-container">
             <button class="state-btn" data-state="TCU">TCU</button>
             <button class="state-btn" data-state="TCE_RJ">TCE RJ</button>
@@ -1018,7 +705,6 @@
                 <button class="filter-btn active" data-filter="all">Todos</button>
                 <button class="filter-btn" data-filter="pending">Pendentes</button>
                 <button class="filter-btn" data-filter="completed">Concluídos</button>
-                <button class="filter-btn" id="startCycleBtn" style="background-color: #9b59b6;">Iniciar Ciclo</button>
             </div>
             
             <div class="state-categories">
@@ -1100,7 +786,7 @@
                 engenhariaDados: [
                     { text: '1 Bancos de Dados. Relacionais: Oracle e Microsoft SQL Server. Não relacionais (NoSQL): Elasticsearch e MongoDB. Modelagens de dados. Relacional, multidimensional, nosql. SQL (Procedural Language / Structured Query Language).' },
                     { text: '2 Arquitetura de Inteligência de Negócio. DataWarehouse, DataMart, DataLake, DataMesh. ' },
-                    { text: '3 Conectores e integração com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
+                    { text: '3 Conectores e integação com fontes de dados. APIs REST/SOAP, Web Services. Arquivos planos (CSV, JSON, XML, Parquet). Mensageria e eventos. Controle de Integridade de dados. Segurança na captação de dados (TLS, autenticação, mascaramento). Estratégias de buffer e ordenação' },
                     { text: '4 Fluxo de manipulação de dados. ETL. Pepiline de dados: versionamento, logging e auditoria, tolerância a falhas, retries e checkpoints, Integração com CI/CD' },
                     { text: '5 Governança e Qualidade de Dados. Linhagem e catalogação. Qualidade de dados: validação, conformidade, deduplicação. Metadados, glossários de dados, políticas de acesso.' },
                     { text: '6 Integração com nuvem. Serviços gerenciados (Azure Data Factory, Azure Service Fabric, Azure Databricks). Armazenamento (S3, Azure Blob, GCS). Integração com serviços de IA e análise.' }
@@ -1185,17 +871,7 @@
         let linkData = {};
         let isOnline = false;
         let currentState = null;
-        
-        // Sistema de ciclo redondo
-        let studyCycleData = {
-            currentDay: 1,
-            selectedDisciplines: [],
-            disciplinesPerDay: 2,
-            startDate: null,
-            completedDays: {},
-            currentRound: 1,
-            cycleHistory: []
-        };
+        let currentDiscipline = null;
 
         // Função para fazer requisições para o Google Apps Script
         async function makeRequest(action, data = {}) {
@@ -1228,13 +904,11 @@
             if (action === 'getProgress') {
                 const storedProgress = JSON.parse(localStorage.getItem('progressData')) || {};
                 const storedLinkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                const storedStudyCycle = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
                 
                 return {
                     success: true,
                     progressData: storedProgress,
-                    linkData: storedLinkData,
-                    studyCycleData: storedStudyCycle
+                    linkData: storedLinkData
                 };
             }
             return { success: false };
@@ -1257,14 +931,12 @@
             // Salva localmente como fallback
             localStorage.setItem('progressData', JSON.stringify(progressData));
             localStorage.setItem('linkData', JSON.stringify(linkData));
-            localStorage.setItem('studyCycleData', JSON.stringify(studyCycleData));
             
             // Tenta salvar no servidor
             try {
                 const result = await makeRequest('saveProgress', {
                     progressData: progressData,
-                    linkData: linkData,
-                    studyCycleData: studyCycleData
+                    linkData: linkData
                 });
                 
                 if (result.success) {
@@ -1287,29 +959,18 @@
                 if (result.success) {
                     progressData = result.progressData || {};
                     linkData = result.linkData || {};
-                    studyCycleData = result.studyCycleData || studyCycleData;
                 } else {
                     // Fallback para localStorage
                     progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                     linkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                    studyCycleData = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
                 }
             } catch (error) {
                 console.warn('Erro ao carregar do servidor, usando localStorage');
                 progressData = JSON.parse(localStorage.getItem('progressData')) || {};
                 linkData = JSON.parse(localStorage.getItem('linkData')) || {};
-                studyCycleData = JSON.parse(localStorage.getItem('studyCycleData')) || studyCycleData;
             }
             
             updateProgressDisplay();
-            
-            // Mostra o ciclo se estiver ativo
-            if (studyCycleData.selectedDisciplines && studyCycleData.selectedDisciplines.length > 0) {
-                document.getElementById('studyCycleContainer').style.display = 'block';
-                document.getElementById('disciplineSelection').style.display = 'none';
-                document.getElementById('currentDayCard').style.display = 'block';
-                updateRoundCycleDisplay();
-            }
         }
 
         // Função para atualizar o display de progresso
@@ -1823,7 +1484,7 @@
         document.getElementById('disciplineSelect').addEventListener('change', function() {
             const selectedDiscipline = this.value;
             if (selectedDiscipline) {
-                scrollToDiscipline(selectedDiscipline);
+                showOnlySelectedDiscipline(selectedDiscipline);
                 this.value = ''; // Reset do dropdown
             }
         });
@@ -1832,225 +1493,81 @@
         document.querySelectorAll('.discipline-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const disciplina = this.getAttribute('data-disciplina');
-                scrollToDiscipline(disciplina);
+                showOnlySelectedDiscipline(disciplina);
             });
         });
         
-        // Função para rolar até uma disciplina específica
-        function scrollToDiscipline(disciplinaKey) {
+        // Função para mostrar apenas a disciplina selecionada
+        function showOnlySelectedDiscipline(disciplinaKey) {
             // Primeiro, verifica se há um órgão selecionado
             if (!currentState) {
                 alert('Selecione um órgão primeiro!');
                 return;
             }
             
-            // Encontra a categoria correspondente
-            const categoryElement = document.querySelector(`.category[data-disciplina="${getCategoryDisplayName(disciplinaKey)}"]`);
+            // Define a disciplina atual
+            currentDiscipline = disciplinaKey;
             
-            if (categoryElement) {
-                // Rola até a categoria
-                categoryElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            // Obtém o nome de exibição da disciplina
+            const displayName = getCategoryDisplayName(disciplinaKey);
+            
+            // Oculta todas as disciplinas
+            document.querySelectorAll('.category').forEach(category => {
+                category.style.display = 'none';
+            });
+            
+            // Mostra apenas a disciplina selecionada
+            const selectedCategory = document.querySelector(`.category[data-disciplina="${displayName}"]`);
+            if (selectedCategory) {
+                selectedCategory.style.display = 'block';
                 
-                // Destaca a categoria por alguns segundos
-                categoryElement.style.boxShadow = '0 0 0 3px rgba(52, 152, 219, 0.5)';
-                categoryElement.style.transition = 'box-shadow 0.3s';
+                // Rola até a disciplina selecionada
+                selectedCategory.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                
+                // Destaca a disciplina por alguns segundos
+                selectedCategory.style.boxShadow = '0 0 0 3px rgba(52, 152, 219, 0.5)';
+                selectedCategory.style.transition = 'box-shadow 0.3s';
                 
                 setTimeout(() => {
-                    categoryElement.style.boxShadow = '';
+                    selectedCategory.style.boxShadow = '';
                 }, 2000);
             }
         }
         
-        // ========== SISTEMA DE CICLO REDONDO ==========
-        
-        // Iniciar ciclo de estudos
-        document.getElementById('startCycleBtn').addEventListener('click', function() {
-            const currentOrg = document.getElementById('stateName').textContent;
-            if (!currentOrg || currentOrg === 'Órgão') {
-                alert('Selecione um órgão primeiro!');
-                return;
-            }
-            
-            // Mostra a seleção de disciplinas
-            document.getElementById('studyCycleContainer').style.display = 'block';
-            document.getElementById('disciplineSelection').style.display = 'block';
-            document.getElementById('currentDayCard').style.display = 'none';
-        });
-
-        // Confirmar disciplinas selecionadas
-        document.getElementById('confirmDisciplinesBtn').addEventListener('click', function() {
-            const selectedCheckboxes = document.querySelectorAll('.discipline-checkboxes input:checked');
-            
-            if (selectedCheckboxes.length === 0) {
-                alert('Selecione pelo menos uma disciplina!');
-                return;
-            }
-            
-            studyCycleData.selectedDisciplines = Array.from(selectedCheckboxes).map(cb => cb.value);
-            studyCycleData.disciplinesPerDay = parseInt(document.getElementById('disciplinesPerDay').value);
-            studyCycleData.currentDay = 1;
-            studyCycleData.startDate = new Date();
-            studyCycleData.completedDays = {};
-            studyCycleData.currentRound = 1;
-            
-            // Esconde a seleção e mostra o ciclo
-            document.getElementById('disciplineSelection').style.display = 'none';
-            document.getElementById('currentDayCard').style.display = 'block';
-            
-            updateRoundCycleDisplay();
-            saveProgress();
-            
-            // Rola até o ciclo de estudos
-            document.getElementById('studyCycleContainer').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Função para obter as disciplinas do dia atual
-        function getCurrentDayDisciplines() {
-            if (studyCycleData.selectedDisciplines.length === 0) return [];
-            
-            const startIndex = (studyCycleData.currentDay - 1) * studyCycleData.disciplinesPerDay;
-            const endIndex = Math.min(startIndex + studyCycleData.disciplinesPerDay, studyCycleData.selectedDisciplines.length);
-            
-            let dayDisciplines = studyCycleData.selectedDisciplines.slice(startIndex, endIndex);
-            
-            // Se não há disciplinas suficientes para preencher o dia, pega do início
-            if (dayDisciplines.length < studyCycleData.disciplinesPerDay) {
-                const remaining = studyCycleData.disciplinesPerDay - dayDisciplines.length;
-                dayDisciplines = dayDisciplines.concat(studyCycleData.selectedDisciplines.slice(0, remaining));
-            }
-            
-            return dayDisciplines;
-        }
-
-        // Atualizar display do ciclo redondo
-        function updateRoundCycleDisplay() {
-            if (studyCycleData.selectedDisciplines.length === 0) return;
-            
-            const currentDayDisciplines = getCurrentDayDisciplines();
-            const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
-            
-            // Atualiza o display das disciplinas
-            const disciplinesContainer = document.getElementById('currentDisciplinesNames');
-            disciplinesContainer.innerHTML = '';
-            
-            currentDayDisciplines.forEach(disciplineKey => {
-                const disciplineName = getCategoryDisplayName(disciplineKey);
-                const badge = document.createElement('span');
-                badge.className = 'discipline-badge';
-                badge.textContent = disciplineName;
-                disciplinesContainer.appendChild(badge);
+        // Função para mostrar todas as disciplinas novamente
+        function showAllDisciplines() {
+            document.querySelectorAll('.category').forEach(category => {
+                category.style.display = 'block';
             });
+            currentDiscipline = null;
+        }
+        
+        // Adiciona um botão para mostrar todas as disciplinas
+        function addShowAllButton() {
+            const controls = document.querySelector('.controls');
             
-            document.getElementById('currentDayNumber').textContent = studyCycleData.currentDay;
-            document.getElementById('totalDays').textContent = totalDays;
-            
-            // Calcula data do ciclo
-            const cycleDate = new Date(studyCycleData.startDate);
-            cycleDate.setDate(cycleDate.getDate() + studyCycleData.currentDay - 1);
-            document.getElementById('cycleDate').textContent = cycleDate.toLocaleDateString('pt-BR');
-
-            // Atualiza estatísticas
-            const completedDaysCount = Object.keys(studyCycleData.completedDays).length;
-            document.getElementById('completedDays').textContent = completedDaysCount;
-            document.getElementById('cycleRound').textContent = studyCycleData.currentRound;
-            document.getElementById('totalCompleted').textContent = completedDaysCount + (studyCycleData.currentRound - 1) * totalDays;
-
-            // Atualiza progresso
-            const progressPercent = (completedDaysCount / totalDays) * 100;
-            document.getElementById('cycleProgressFill').style.width = `${progressPercent}%`;
-            document.getElementById('cycleProgressText').textContent = `${Math.round(progressPercent)}%`;
-
-            // Mostra/oculta mensagem de conclusão
-            const completionMessage = document.getElementById('completionMessage');
-            if (studyCycleData.currentDay === 1 && studyCycleData.currentRound > 1) {
-                completionMessage.style.display = 'block';
-                setTimeout(() => {
-                    completionMessage.style.display = 'none';
-                }, 5000);
-            } else {
-                completionMessage.style.display = 'none';
+            // Verifica se o botão já existe
+            if (!document.getElementById('showAllBtn')) {
+                const showAllBtn = document.createElement('button');
+                showAllBtn.id = 'showAllBtn';
+                showAllBtn.className = 'filter-btn';
+                showAllBtn.textContent = 'Todas as Disciplinas';
+                showAllBtn.style.backgroundColor = '#9b59b6';
+                
+                showAllBtn.addEventListener('click', function() {
+                    showAllDisciplines();
+                });
+                
+                controls.appendChild(showAllBtn);
             }
         }
-
-        // Marcar dia como concluído e avançar
-        document.getElementById('markCompleteBtn').addEventListener('click', function() {
-            if (studyCycleData.selectedDisciplines.length === 0) return;
-            
-            const currentDayDisciplines = getCurrentDayDisciplines();
-            
-            // Marca o dia como concluído
-            studyCycleData.completedDays[studyCycleData.currentDay] = {
-                date: new Date(),
-                disciplines: currentDayDisciplines
-            };
-
-            // Avança para o próximo dia
-            studyCycleData.currentDay++;
-
-            const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
-            
-            // Se completou todos os dias, reinicia o ciclo (nova rodada)
-            if (studyCycleData.currentDay > totalDays) {
-                studyCycleData.currentDay = 1;
-                studyCycleData.currentRound++;
-                studyCycleData.completedDays = {};
-                
-                // Adiciona ao histórico
-                studyCycleData.cycleHistory.push({
-                    round: studyCycleData.currentRound - 1,
-                    endDate: new Date()
-                });
-            }
-
-            updateRoundCycleDisplay();
-            saveProgress();
-        });
-
-        // Voltar para o dia anterior
-        document.getElementById('prevDayBtn').addEventListener('click', function() {
-            if (studyCycleData.selectedDisciplines.length === 0) return;
-            
-            if (studyCycleData.currentDay > 1) {
-                studyCycleData.currentDay--;
-                // Remove o dia do registro de concluídos se existir
-                delete studyCycleData.completedDays[studyCycleData.currentDay];
-            } else {
-                // Se está no dia 1, vai para o último dia da rodada anterior
-                if (studyCycleData.currentRound > 1) {
-                    studyCycleData.currentRound--;
-                    const totalDays = Math.ceil(studyCycleData.selectedDisciplines.length / studyCycleData.disciplinesPerDay);
-                    studyCycleData.currentDay = totalDays;
-                    // Recupera os dias concluídos da rodada anterior (simulação)
-                    for (let i = 1; i < studyCycleData.currentDay; i++) {
-                        studyCycleData.completedDays[i] = {
-                            date: new Date(),
-                            disciplines: getCurrentDayDisciplines()
-                        };
-                    }
-                }
-            }
-            
-            updateRoundCycleDisplay();
-            saveProgress();
-        });
-
-        // Reiniciar ciclo
-        document.getElementById('resetCycleBtn').addEventListener('click', function() {
-            if (confirm('Tem certeza que deseja reiniciar o ciclo de estudos? Todo o progresso será perdido.')) {
-                studyCycleData.currentDay = 1;
-                studyCycleData.currentRound = 1;
-                studyCycleData.completedDays = {};
-                studyCycleData.startDate = new Date();
-                studyCycleData.cycleHistory = [];
-                
-                // Mostra novamente a seleção de disciplinas
-                document.getElementById('disciplineSelection').style.display = 'block';
-                document.getElementById('currentDayCard').style.display = 'none';
-                
-                updateRoundCycleDisplay();
-                saveProgress();
-            }
-        });
+        
+        // Modifica a função loadStateContent para adicionar o botão
+        const originalLoadStateContent = loadStateContent;
+        loadStateContent = function(stateId, stateName) {
+            originalLoadStateContent(stateId, stateName);
+            addShowAllButton();
+        };
         
         // Carrega os dados quando a página inicia
         document.addEventListener('DOMContentLoaded', async function() {
