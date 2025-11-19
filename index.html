@@ -407,10 +407,10 @@
             background-color: #8e44ad;
         }
         
-        /* State Categories */
+        /* State Categories - LAYOUT HORIZONTAL MELHORADO */
         .state-categories {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
             gap: 25px;
         }
         
@@ -448,7 +448,7 @@
             border-radius: 20px;
         }
         
-        /* Content Items */
+        /* Content Items - LAYOUT HORIZONTAL MELHORADO */
         .content-item {
             display: flex;
             align-items: flex-start;
@@ -551,7 +551,7 @@
             gap: 8px;
         }
         
-        .link-save, .link-cancel, .link-remove {
+        .link-save, .link-cancel {
             padding: 8px 15px;
             border: none;
             border-radius: 4px;
@@ -570,11 +570,11 @@
             background-color: #27ae60;
         }
         
-        .link-cancel, .link-remove {
+        .link-cancel {
             background-color: var(--danger);
         }
         
-        .link-cancel:hover, .link-remove:hover {
+        .link-cancel:hover {
             background-color: #c0392b;
         }
         
@@ -1206,20 +1206,6 @@
                 link.textContent = 'Ver Resumo';
                 link.target = '_blank';
                 actionsDiv.appendChild(link);
-                
-                // Botão para remover link do item
-                const removeBtn = document.createElement('button');
-                removeBtn.className = 'link-remove';
-                removeBtn.textContent = 'Remover';
-                removeBtn.addEventListener('click', function() {
-                    delete linkData[itemId];
-                    saveProgress();
-                    
-                    // Recria o item para atualizar a interface
-                    const newItem = createContentItem(text, org, category, index);
-                    itemDiv.parentNode.replaceChild(newItem, itemDiv);
-                });
-                actionsDiv.appendChild(removeBtn);
             } else {
                 const addLinkBtn = document.createElement('button');
                 addLinkBtn.className = 'add-link-btn';
