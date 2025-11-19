@@ -713,6 +713,96 @@
         .fade-in {
             animation: fadeIn 0.5s ease forwards;
         }
+        
+        /* Export/Import Controls */
+        .data-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .export-btn, .import-btn {
+            padding: 10px 20px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            box-shadow: var(--shadow);
+        }
+        
+        .export-btn:hover, .import-btn:hover {
+            background-color: #8e44ad;
+            transform: translateY(-2px);
+        }
+        
+        /* Modal para importação */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            max-width: 500px;
+            width: 90%;
+        }
+        
+        .modal h3 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .modal textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border: 1px solid var(--light);
+            border-radius: var(--radius);
+            margin-bottom: 15px;
+            font-family: monospace;
+            resize: vertical;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .modal-confirm {
+            background-color: var(--success);
+            color: white;
+        }
+        
+        .modal-cancel {
+            background-color: var(--danger);
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -737,6 +827,11 @@
             <div class="progress-fill" id="overallProgress" style="width: 0%"></div>
         </div>
         <p id="progressText">0% concluído</p>
+        
+        <div class="data-controls">
+            <button class="export-btn" id="exportBtn">📤 Exportar Dados</button>
+            <button class="import-btn" id="importBtn">📥 Importar Dados</button>
+        </div>
     </div>
 
     <div class="container">
@@ -826,6 +921,19 @@
         <p>Atualizado em <span id="updateDate"></span> | Meta TI - Preparação para Concursos</p>
         <p>© 2025 Meta TI - Todos os direitos reservados</p>
     </footer>
+
+    <!-- Modal para importação de dados -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <h3>Importar Dados</h3>
+            <p>Cole aqui os dados exportados de outro dispositivo:</p>
+            <textarea id="importData" placeholder="Cole os dados JSON aqui..."></textarea>
+            <div class="modal-actions">
+                <button class="modal-btn modal-cancel" id="cancelImport">Cancelar</button>
+                <button class="modal-btn modal-confirm" id="confirmImport">Importar</button>
+            </div>
+        </div>
+    </div>
 
     <button class="sync-btn" id="syncButton">🔄 Sincronizar</button>
     <div class="sync-status offline" id="syncStatus">Offline</div>
@@ -1008,6 +1116,26 @@
             // Botão para mostrar todas as disciplinas
             document.getElementById('showAllBtn').addEventListener('click', function() {
                 showAllDisciplines();
+            });
+            
+            // Exportação de dados
+            document.getElementById('exportBtn').addEventListener('click', function() {
+                exportData();
+            });
+            
+            // Importação de dados
+            document.getElementById('importBtn').addEventListener('click', function() {
+                document.getElementById('importModal').style.display = 'flex';
+            });
+            
+            // Modal de importação
+            document.getElementById('cancelImport').addEventListener('click', function() {
+                document.getElementById('importModal').style.display = 'none';
+                document.getElementById('importData').value = '';
+            });
+            
+            document.getElementById('confirmImport').addEventListener('click', function() {
+                importData();
             });
         }
 
@@ -1499,6 +1627,71 @@
                 category.style.display = 'block';
             });
             currentDiscipline = null;
+        }
+        
+        // Função para exportar dados
+        function exportData() {
+            const exportData = {
+                progressData: progressData,
+                linkData: linkData,
+                exportDate: new Date().toISOString(),
+                version: '1.0'
+            };
+            
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            // Criar link de download
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `meta-ti-dados-${new Date().toISOString().split('T')[0]}.json`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert('Dados exportados com sucesso! Salve o arquivo para importar em outro dispositivo.');
+        }
+        
+        // Função para importar dados
+        function importData() {
+            const importText = document.getElementById('importData').value.trim();
+            
+            if (!importText) {
+                alert('Por favor, cole os dados exportados no campo de texto.');
+                return;
+            }
+            
+            try {
+                const importedData = JSON.parse(importText);
+                
+                // Validar estrutura dos dados
+                if (!importedData.progressData || !importedData.linkData) {
+                    throw new Error('Formato de dados inválido');
+                }
+                
+                // Confirmar substituição
+                if (confirm('Isso substituirá todos os seus dados atuais. Tem certeza?')) {
+                    progressData = importedData.progressData;
+                    linkData = importedData.linkData;
+                    
+                    // Salvar dados importados
+                    saveProgress();
+                    
+                    // Recarregar a interface
+                    loadStateContent(currentState, currentState);
+                    
+                    // Fechar modal
+                    document.getElementById('importModal').style.display = 'none';
+                    document.getElementById('importData').value = '';
+                    
+                    alert('Dados importados com sucesso!');
+                }
+            } catch (error) {
+                alert('Erro ao importar dados: ' + error.message);
+                console.error('Erro na importação:', error);
+            }
         }
     </script>
 </body>
