@@ -346,6 +346,12 @@
             border-radius: 20px;
         }
         
+        /* Botão CB Amarelo */
+        .discipline-btn.cb {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb700 100%);
+            color: #333;
+        }
+        
         /* State Info */
         .state-info {
             background-color: var(--white);
@@ -863,6 +869,7 @@
                     <option value="inteligenciaArtificial">INTELIGÊNCIA ARTIFICIAL</option>
                     <option value="contratacaoTI">CONTRATAÇÕES DE TI</option>
                     <option value="gestaoTI">GESTÃO DE TI</option>
+                    <option value="cb">CB</option>
                 </select>
             </div>
         </div>
@@ -899,6 +906,11 @@
             <button class="discipline-btn" data-disciplina="gestaoTI">
                 GESTÃO DE TI
                 <div class="progress" id="gestaoTIProgressBtn">0/0</div>
+            </button>
+            <!-- NOVO BOTÃO CB AMARELO -->
+            <button class="discipline-btn cb" data-disciplina="cb">
+                CB
+                <div class="progress" id="cbProgressBtn">0/0</div>
             </button>
         </div>
         
@@ -950,7 +962,7 @@
             document.querySelector('.nav-links').classList.toggle('active');
         });
         
-        // Dados atualizados com disciplinas de TI (apenas TCU)
+        // Dados atualizados com disciplinas de TI (apenas TCU) + CB
         const stateLinks = {
             'TCU': {
                 infraestruturaTI: [
@@ -1025,6 +1037,17 @@
                     { text: '1 Gerenciamento de serviços (ITIL v4): conceitos básicos, estrutura e objetivos' },
                     { text: '2 Governança de TI (COBIT 5): conceitos básicos, estrutura e objetivos' },
                     { text: '3 Metodologias ágeis: Scrum, XP, Kanban, TDD, BDD e DDD' }
+                ],
+                // NOVA DISCIPLINA CB
+                cb: [
+                    { text: '1. PORTUGUÊS' },
+                    { text: '2. INGLÊS' },
+                    { text: '3. RACIOCÍNIO ANALÍTICO' },
+                    { text: '4. CONTROLE EXTERNO' },
+                    { text: '5. ADMINISTRAÇÃO PÚBLICA' },
+                    { text: '6. DIREITO ADMINISTRATIVO' },
+                    { text: '7. DIREITO CONSTITUCIONAL' },
+                    { text: '8. AUDITORIA GOVERNAMENTAL' }
                 ]
             }
         };
@@ -1265,7 +1288,7 @@
             const categories = [
                 'infraestruturaTI', 'engenhariaDados', 'engenhariaSoftware', 
                 'segurancaInformacao', 'computacaoNuvem', 'inteligenciaArtificial',
-                'contratacaoTI', 'gestaoTI'
+                'contratacaoTI', 'gestaoTI', 'cb'
             ];
             
             const currentOrg = document.getElementById('stateName').textContent;
@@ -1457,7 +1480,7 @@
                 const categories = [
                     'infraestruturaTI', 'engenhariaDados', 'engenhariaSoftware', 
                     'segurancaInformacao', 'computacaoNuvem', 'inteligenciaArtificial',
-                    'contratacaoTI', 'gestaoTI'
+                    'contratacaoTI', 'gestaoTI', 'cb'
                 ];
                 
                 // Adiciona conteúdo para cada categoria
@@ -1587,7 +1610,8 @@
                 'computacaoNuvem': 'COMPUTAÇÃO EM NUVEM',
                 'inteligenciaArtificial': 'INTELIGÊNCIA ARTIFICIAL',
                 'contratacaoTI': 'CONTRATAÇÕES DE TI',
-                'gestaoTI': 'GESTÃO DE TI'
+                'gestaoTI': 'GESTÃO DE TI',
+                'cb': 'CB'
             };
             
             return categoryMap[categoryKey] || categoryKey;
